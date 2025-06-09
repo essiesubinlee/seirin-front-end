@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="seirin1.Pages.DataTable"
+             Title="DataTable">
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="10" x:Name="DataStack">
+            <Label Text="Solar Data from Firebase" FontSize="24" HorizontalOptions="Center"/>
+            <CollectionView x:Name="DataListView" Margin="0,20,0,0" HeightRequest="600">
+                <CollectionView.Header>
+                    <Grid Padding="10" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*" BackgroundColor="#eee">
+                        <Label Grid.Column="0" Text="Time" FontAttributes="Bold" />
+                        <Label Grid.Column="1" Text="Solar Voltage (V)" FontAttributes="Bold"/>
+                        <Label Grid.Column="2" Text="Solar Current (A)" FontAttributes="Bold"/>
+                        <Label Grid.Column="3" Text="Load Voltage (V)" FontAttributes="Bold"/>
+                        <Label Grid.Column="4" Text="Load Current (A)" FontAttributes="Bold"/>
+                        <Label Grid.Column="5" Text="Battery Voltage (V)" FontAttributes="Bold"/>
+                        <Label Grid.Column="6" Text="Battery Current (A)" FontAttributes="Bold"/>
+                        <Label Grid.Column="7" Text="Solar Power (W)" FontAttributes="Bold"/>
+                        <Label Grid.Column="8" Text="Load Power (W)" FontAttributes="Bold"/>
+                        <Label Grid.Column="9" Text="Battery Power (W)" FontAttributes="Bold"/>
+                        
+
+
+                    </Grid>
+                </CollectionView.Header>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10" ColumnDefinitions="*,*,*,*,*,*,*,*,*,*">
+                            <Label Grid.Column="0" Text="{Binding Timestamp, StringFormat='{0:MM-dd HH:mm}'}"/>
+                            <Label Grid.Column="1" Text="{Binding SolarVoltage}"/>
+                            <Label Grid.Column="2" Text="{Binding SolarCurrent}"/>
+                            <Label Grid.Column="3" Text="{Binding LoadVoltage}"/>
+                            <Label Grid.Column="4" Text="{Binding LoadCurrent}"/>
+                            <Label Grid.Column="5" Text="{Binding BatteryVoltage}"/>
+                            <Label Grid.Column="6" Text="{Binding BatteryCurrent}"/>
+                            <Label Grid.Column="7" Text="{Binding SolarPower}"/>
+                            <Label Grid.Column="8" Text="{Binding LoadPower}"/>
+                            <Label Grid.Column="9" Text="{Binding BatteryPower}"/>
+
+
+                        </Grid>
+                              
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </StackLayout>
+    </ScrollView>
+  
+</ContentPage>
