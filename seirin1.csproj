@@ -64,6 +64,8 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+		<PackageReference Include="Syncfusion.Maui.Charts" Version="30.1.37" />
+		<PackageReference Include="Syncfusion.Maui.Toolkit" Version="1.0.5" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -73,16 +75,19 @@
 	  <Compile Update="Pages\DataTable.xaml.cs">
 	    <DependentUpon>DataTable.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Charts.xaml.cs">
+	    <DependentUpon>Charts.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Pages\DataTable.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\NewPage2.xaml">
+	  <MauiXaml Update="Pages\AboutPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\AboutPage.xaml">
+	  <MauiXaml Update="Pages\Charts.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="seirin1.Pages.Charts"
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             xmlns:model="clr-namespace:seirin1.ViewModels"
+             Title="Charts">
+    <ContentPage.BindingContext>
+        <model:DashboardViewModel/>
+    </ContentPage.BindingContext>
+    
+    <VerticalStackLayout>
+        <Label 
+            Text="Welcome to .NET MAUI!"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <!-- Define a Syncfusion Cartesian Chart to visualize data -->
+        <chart:SfCartesianChart>
+
+            <!-- Set the title for the Cartesian chart -->
+            <chart:SfCartesianChart.Title>
+                <Label Text="Height Comparison" HorizontalOptions="Center" />
+            </chart:SfCartesianChart.Title>
+
+            <!-- Add a legend to the chart for identifying series -->
+            <chart:SfCartesianChart.Legend>
+                <chart:ChartLegend />
+            </chart:SfCartesianChart.Legend>
+
+            <!-- Define the horizontal (X) axis as a category axis -->
+            <chart:SfCartesianChart.XAxes>
+                <chart:CategoryAxis>
+                    <!-- Set the title for the X-axis -->
+                    <chart:CategoryAxis.Title>
+                        <chart:ChartAxisTitle Text="Name" />
+                    </chart:CategoryAxis.Title>
+                </chart:CategoryAxis>
+            </chart:SfCartesianChart.XAxes>
+
+            <!-- Define the vertical (Y) axis as a numerical axis -->
+            <chart:SfCartesianChart.YAxes>
+                <chart:NumericalAxis>
+                    <!-- Set the title for the Y-axis -->
+                    <chart:NumericalAxis.Title>
+                        <chart:ChartAxisTitle Text="Height(in cm)" />
+                    </chart:NumericalAxis.Title>
+                </chart:NumericalAxis>
+            </chart:SfCartesianChart.YAxes>
+
+            <!-- Initialize a ColumnSeries to visualize the data in columns -->
+            <chart:ColumnSeries Label="Height"
+                         EnableTooltip="True" 
+                         ShowDataLabels="True" 
+                         ItemsSource="{Binding Data}" 
+                         XBindingPath="Name" 
+                         YBindingPath="Height">
+                <!-- Define the settings for data labels of the columns -->
+                <chart:ColumnSeries.DataLabelSettings>
+                    <chart:CartesianDataLabelSettings LabelPlacement="Inner" />
+                </chart:ColumnSeries.DataLabelSettings>
+            </chart:ColumnSeries>
+
+        </chart:SfCartesianChart>
+    </VerticalStackLayout>
+</ContentPage>

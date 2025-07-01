@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:seirin1"
              xmlns:pages="clr-namespace:seirin1.Pages"
+             xmlns:converters="clr-namespace:seirin1.Converters"
              x:Class="seirin1.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -10,6 +11,7 @@
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <converters:PercentToWidthConverter x:Key="PercentToWidthConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

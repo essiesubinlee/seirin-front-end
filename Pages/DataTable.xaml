@@ -19,7 +19,7 @@
                         <Label Grid.Column="7" Text="Solar Power (W)" FontAttributes="Bold"/>
                         <Label Grid.Column="8" Text="Load Power (W)" FontAttributes="Bold"/>
                         <Label Grid.Column="9" Text="Battery Power (W)" FontAttributes="Bold"/>
-                        
+
 
 
                     </Grid>
@@ -41,12 +41,12 @@
 
 
                         </Grid>
-                              
+
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
+
         </StackLayout>
     </ScrollView>
-  
+
 </ContentPage>

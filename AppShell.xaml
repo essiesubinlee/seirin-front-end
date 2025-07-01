@@ -12,7 +12,7 @@
     <TabBar>
         <ShellContent Title="Home" ContentTemplate="{DataTemplate pages:MainPage}" Route="MainPage" />
         <ShellContent Title="Data Table" ContentTemplate="{DataTemplate pages:DataTable}" Route="DataTable"/>
-        <ShellContent Title="Page2" ContentTemplate="{DataTemplate pages:NewPage2}" Route="NewPage2"/>
+        <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate pages:Charts}" Route="Charts"/>
         <ShellContent Title="Page3" ContentTemplate="{DataTemplate pages:AboutPage}" Route="AboutPage"/>
     </TabBar>
     

@@ -20,7 +20,7 @@ namespace seirin1.Pages
             try
             {
                 var dataList = await _firebaseService.FetchWithCacheAsync();
-                
+
 
 
                 if (dataList.Count == 0)
@@ -37,5 +37,3 @@ namespace seirin1.Pages
         }
     }
 }
-
-
