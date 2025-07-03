@@ -32,22 +32,21 @@ namespace seirin1.Data
         public double LoadPower { get; set; }
     }
 
-    
+
     public class ChartData
     {
-        public string Name { get; set; }
-        public double Height { get; set; }
-        public DateTime Time { get; set; }
-        public double InverterPower { get; set; }
-        public double FeedinPower { get; set; }
-        public double LoadPower { get; set; }
+        public string Title { get; set; }
+        public string Type { get; set; } // Add a Type property (e.g., "LineChart", "ColumnChart")
+        public ObservableCollection<ChartPoint> Data { get; set; } // Your chart data points
     }
 
-    public class ChartItem
+    public class ChartPoint // Example for data points
     {
-        public string Title { get; set; }
-        public string Type { get; set; } // "line" or "column"
-        public ObservableCollection<ChartData> Data { get; set; }
+        public DateTime Time { get; set; } // For LineSeries XAxis
+        public double InverterPower { get; set; } // For LineSeries YAxis
+
+        public string Name { get; set; } // For ColumnSeries XAxis
+        public double Height { get; set; } // For ColumnSeries YAxis
     }
 
 
@@ -62,7 +61,7 @@ namespace seirin1.Data
     }
 
 
-    public class WeatherItem
+    public class WeatherData
     {
         public string Location { get; set; }
         public DateTime CurrentDate { get; set; }

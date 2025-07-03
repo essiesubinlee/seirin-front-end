@@ -9,7 +9,27 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <local:ChartWeatherTemplateSelector x:Key="ChartWeatherTemplateSelector">
-                <local:ChartWeatherTemplateSelector.ChartTemplate>
+                <local:ChartWeatherTemplateSelector.LineChartTemplate>
+                    <DataTemplate>
+                        <Grid WidthRequest="300" HeightRequest="250" Margin="10">
+                            <chart:SfCartesianChart>
+                                <chart:SfCartesianChart.Title>
+                                    <Label Text="{Binding Title}" HorizontalOptions="Center"/>
+                                </chart:SfCartesianChart.Title>
+                                <chart:SfCartesianChart.XAxes>
+                                    <chart:DateTimeAxis Name="TimeAxis"/>
+                                </chart:SfCartesianChart.XAxes>
+                                <chart:SfCartesianChart.YAxes>
+                                    <chart:NumericalAxis/>
+                                </chart:SfCartesianChart.YAxes>
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="InverterPower" />
+                            </chart:SfCartesianChart>
+                            <Button Text="X" BackgroundColor="black" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked" />
+                        </Grid>
+                    </DataTemplate>
+                </local:ChartWeatherTemplateSelector.LineChartTemplate>
+
+                <local:ChartWeatherTemplateSelector.ColumnChartTemplate>
                     <DataTemplate>
                         <Grid WidthRequest="300" HeightRequest="250" Margin="10">
                             <chart:SfCartesianChart>
@@ -18,34 +38,16 @@
                                 </chart:SfCartesianChart.Title>
                                 <chart:SfCartesianChart.XAxes>
                                     <chart:CategoryAxis Name="CategoryAxis"/>
-                                    <chart:DateTimeAxis Name="TimeAxis"/>
                                 </chart:SfCartesianChart.XAxes>
                                 <chart:SfCartesianChart.YAxes>
                                     <chart:NumericalAxis/>
                                 </chart:SfCartesianChart.YAxes>
-
-                                <chart:LineSeries IsVisible="{Binding Type, Converter={StaticResource LineSeriesVisibilityConverter}}"
-                                ItemsSource="{Binding Data}"  XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="InverterPower" />
-
-                                <chart:ColumnSeries IsVisible="{Binding Type, Converter={StaticResource ColumnSeriesVisibilityConverter}}"
-                                                    ItemsSource="{Binding Data}" XAxisName="CategoryAxis" XBindingPath="Name" YBindingPath="Height" />
-                               
+                                <chart:ColumnSeries ItemsSource="{Binding Data}" XAxisName="CategoryAxis" XBindingPath="Name" YBindingPath="Height" />
                             </chart:SfCartesianChart>
-
-                            <Button Text="X"
-                                    BackgroundColor="black"
-                                    TextColor="White"
-                                    CornerRadius="10"
-                                    WidthRequest="24"
-                                    HeightRequest="24"
-                                    FontSize="10"
-                                    Padding="0"
-                                    HorizontalOptions="End"
-                                    VerticalOptions="Start"
-                                    Clicked="Delete_Clicked" />
+                            <Button Text="X" BackgroundColor="black" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked" />
                         </Grid>
                     </DataTemplate>
-                </local:ChartWeatherTemplateSelector.ChartTemplate>
+                </local:ChartWeatherTemplateSelector.ColumnChartTemplate>
 
                 <local:ChartWeatherTemplateSelector.WeatherTemplate>
                     <DataTemplate>
@@ -60,37 +62,15 @@
                                     <CollectionView ItemsSource="{Binding Forecast}" ItemsLayout="HorizontalList" HeightRequest="100">
                                         <CollectionView.ItemTemplate>
                                             <DataTemplate>
-                                                <StackLayout Orientation="Horizontal"
-                                                     HorizontalOptions="Center"
-                                                     Spacing="15"
-                                                     Padding="10">
-
-                                                    <Label Text="{Binding Humidity, StringFormat='Humidity: {0}%'}"
-                                                       FontSize="15"
-                                                       VerticalOptions="Center" />
-
-
-                                                    <Label Text="{Binding Solar_rad, StringFormat='Solar irradiation: {0}'}"
-                                                       FontSize="15"
-                                                       VerticalOptions="Center" />
+                                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="15" Padding="10">
+                                                    <Label Text="{Binding Humidity, StringFormat='Humidity: {0}%'}" FontSize="15" VerticalOptions="Center" />
+                                                    <Label Text="{Binding Solar_rad, StringFormat='Solar irradiation: {0}'}" FontSize="15" VerticalOptions="Center" />
                                                 </StackLayout>
-
                                             </DataTemplate>
                                         </CollectionView.ItemTemplate>
                                     </CollectionView>
                                 </StackLayout>
-
-                                <Button Text="X"
-                                        BackgroundColor="Red"
-                                        TextColor="White"
-                                        CornerRadius="10"
-                                        WidthRequest="24"
-                                        HeightRequest="24"
-                                        FontSize="10"
-                                        Padding="0"
-                                        HorizontalOptions="End"
-                                        VerticalOptions="Start"
-                                        Clicked="Delete_Clicked"/>
+                                <Button Text="X" BackgroundColor="Red" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked"/>
                             </Grid>
                         </Frame>
                     </DataTemplate>
@@ -102,24 +82,22 @@
     <ContentPage.BindingContext>
         <local:DashboardViewModel />
     </ContentPage.BindingContext>
-    
-    
 
     <ScrollView>
         <StackLayout>
             <HorizontalStackLayout Margin="10">
-                <Button Text="Add Chart" Clicked="OnAddChartClicked" />
+                <Button Text="Add Line Chart" Clicked="OnAddLineChartClicked" />
+                <Button Text="Add Bar Chart" Clicked="OnAddColumnChartClicked" />
                 <Button Text="Add Weather" Clicked="OnAddWeatherClicked" />
             </HorizontalStackLayout>
 
             <FlexLayout BindableLayout.ItemsSource="{Binding Items}"
-            BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
-            Wrap="Wrap"
-            Direction="Row"
-            JustifyContent="Start"
-            AlignItems="Start"
-            Margin="10"/>
+                        BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                        Wrap="Wrap"
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Start"
+                        Margin="10"/>
         </StackLayout>
-        
     </ScrollView>
 </ContentPage>

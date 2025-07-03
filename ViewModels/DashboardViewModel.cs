@@ -1,7 +1,8 @@
-﻿using System;
+﻿using seirin1.Data;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using seirin1.Data;
+using System.Windows.Input;
 
 namespace seirin1
 {
@@ -9,63 +10,83 @@ namespace seirin1
     {
         public ObservableCollection<object> Items { get; set; }
 
+        public ICommand AddLineChartCommand { get; }
+        public ICommand AddColumnChartCommand { get; }
+        public ICommand AddWeatherCommand { get; }
+        public ICommand DeleteItemCommand { get; }
+
+
         public DashboardViewModel()
         {
-            var sampleChartData = new ObservableCollection<ChartData>
-            {
-                new ChartData { Name = "A", Height = 90, Time = DateTime.Now.AddMinutes(-30), InverterPower = 5 },
-                new ChartData { Name = "B", Height = 160, Time = DateTime.Now.AddMinutes(-20), InverterPower = 6 },
-                new ChartData { Name = "C", Height = 100, Time = DateTime.Now.AddMinutes(-10), InverterPower = 4 }
-            };
 
+            Items = new ObservableCollection<object>();
+            AddLineChartCommand = new Command(AddLineChart);
+            AddColumnChartCommand = new Command(AddColumnChart);
+            AddWeatherCommand = new Command(AddWeather);
+            DeleteItemCommand = new Command<object>(DeleteItem);
 
-            var forecast = new ObservableCollection<WeatherForecast>
-            {
-                new WeatherForecast { Icon = "mousty.jpeg", Solar_rad = 80, Humidity = 70 }
-            };
+            // Add some initial items for testing
+            AddLineChart();
+            AddColumnChart();
+            AddWeather();
 
-            Items = new ObservableCollection<object>
+        }
+        public void AddLineChart()
+        {
+            var lineChartData = new ChartData
             {
-                new ChartItem { Title = "Power Overview", Type = "line", Data = sampleChartData },
-                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
-                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
-                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
-                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
-                new WeatherItem
-                {
-                    Location = "Austin",
-                    CurrentDate = DateTime.Today,
-                    CurrentTemp = 27,
-                    Forecast = forecast
-                }
+                Title = "Inverter Power Over Time",
+                Type = "LineChart",
+                Data = new ObservableCollection<ChartPoint>
+            {
+                new ChartPoint { Time = DateTime.Now.AddHours(-3), InverterPower = 50 },
+                new ChartPoint { Time = DateTime.Now.AddHours(-2), InverterPower = 70 },
+                new ChartPoint { Time = DateTime.Now.AddHours(-1), InverterPower = 60 },
+                new ChartPoint { Time = DateTime.Now, InverterPower = 90 }
+            }
             };
+            Items.Add(lineChartData);
         }
 
-        public void AddChart()
+        private void AddColumnChart()
         {
-            Items.Add(new ChartItem
+            var columnChartData = new ChartData
             {
-                Title = "New Chart",
-                Type = "column", // or "line"
-                Data = new ObservableCollection<ChartData>
-                {
-                    new ChartData { Name = "C", Height = 70, Time = DateTime.Now, InverterPower = 4, FeedinPower = 1, LoadPower = 3 }
-                }
+                Title = "Product Sales",
+                Type = "ColumnChart",
+                Data = new ObservableCollection<ChartPoint>
+            {
+                new ChartPoint { Name = "Product A", Height = 120 },
+                new ChartPoint { Name = "Product B", Height = 180 },
+                new ChartPoint { Name = "Product C", Height = 150 },
+                new ChartPoint { Name = "Product D", Height = 90 }
+            }
+            };
+            Items.Add(columnChartData);
+        }
+
+
+        private void AddWeather()
+        {
+            // ... (your existing weather data creation)
+            Items.Add(new WeatherData
+            {
+                Location = "Austin, TX",
+                CurrentDate = DateTime.Now,
+                CurrentTemp = 30,
+                Forecast = new ObservableCollection<WeatherForecast>
+            {
+                new WeatherForecast { Humidity = 60, Solar_rad = 800 }
+            }
             });
         }
 
-        public void AddWeather()
+        private void DeleteItem(object item)
         {
-            Items.Add(new WeatherItem
+            if (Items.Contains(item))
             {
-                Location = "Austin",
-                CurrentDate = DateTime.Today,
-                CurrentTemp = 25,
-                Forecast = new ObservableCollection<WeatherForecast>            
-                {
-                    new WeatherForecast { Icon = "sunny.png", Solar_rad = 200, Humidity = 60 }
-                }
-            });
+                Items.Remove(item);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
