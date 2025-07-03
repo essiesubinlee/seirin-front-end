@@ -1,56 +1,73 @@
-﻿using seirin1.Data;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using seirin1.Data;
 
-namespace seirin1.ViewModels
+namespace seirin1
 {
-    public class DashboardViewModel
+    public class DashboardViewModel : INotifyPropertyChanged
     {
-        public List<Person> Data { get; set; }
-        public ObservableCollection<PowerReading> PowerData { get; set; }
-
-        public string Location { get; set; }
-        public DateTime CurrentDate { get; set; }
-        public double CurrentTemp { get; set; }
-        public string MinMaxTemp { get; set; }
-        public ObservableCollection<WeatherForecast> Forecast { get; set; }
-
-
-
+        public ObservableCollection<object> Items { get; set; }
 
         public DashboardViewModel()
         {
-            Data = new List<Person>
+            var sampleChartData = new ObservableCollection<ChartData>
             {
-                new Person { Name = "David", Height = 170 },
-                new Person { Name = "Michael", Height = 96 },
-                new Person { Name = "Steve", Height = 65 },
-                new Person { Name = "Joel", Height = 182 },
-                new Person { Name = "Bob", Height = 134 }
+                new ChartData { Name = "A", Height = 90, Time = DateTime.Now.AddMinutes(-30), InverterPower = 5 },
+                new ChartData { Name = "B", Height = 160, Time = DateTime.Now.AddMinutes(-20), InverterPower = 6 },
+                new ChartData { Name = "C", Height = 100, Time = DateTime.Now.AddMinutes(-10), InverterPower = 4 }
             };
 
-            PowerData = new ObservableCollection<PowerReading>
+
+            var forecast = new ObservableCollection<WeatherForecast>
             {
-                new PowerReading { Time = DateTime.Today.AddHours(5), InverterPower = 3000, FeedinPower = -2000, LoadPower = 5000 },
-                new PowerReading { Time = DateTime.Today.AddHours(6), InverterPower = 4000, FeedinPower = -1000, LoadPower = 6000 },
-                new PowerReading { Time = DateTime.Today.AddHours(7), InverterPower = 8000, FeedinPower = 1000, LoadPower = 7000 },
-                // ... more data points
+                new WeatherForecast { Icon = "mousty.jpeg", Solar_rad = 80, Humidity = 70 }
             };
 
-            Location = "Austin";
-            CurrentDate = DateTime.Today;
-            CurrentTemp = 25;
-            MinMaxTemp = "15 ℃ ~ 25 ℃";
-
-            Forecast = new ObservableCollection<WeatherForecast>
+            Items = new ObservableCollection<object>
             {
-                new WeatherForecast { Date = DateTime.Today.AddDays(1), Icon = "dotnet_bot.png", Temperature = 30, MinTemp = 16 },
-                new WeatherForecast { Date = DateTime.Today.AddDays(2), Icon = "mousty.jpeg", Temperature = 30, MinTemp = 16 },
-                new WeatherForecast { Date = DateTime.Today.AddDays(3), Icon = "dotnet_bot.png", Temperature = 29, MinTemp = 14 },
+                new ChartItem { Title = "Power Overview", Type = "line", Data = sampleChartData },
+                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
+                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
+                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
+                new ChartItem { Title = "Current Comparison", Type = "column", Data = sampleChartData },
+                new WeatherItem
+                {
+                    Location = "Austin",
+                    CurrentDate = DateTime.Today,
+                    CurrentTemp = 27,
+                    Forecast = forecast
+                }
             };
         }
 
+        public void AddChart()
+        {
+            Items.Add(new ChartItem
+            {
+                Title = "New Chart",
+                Type = "column", // or "line"
+                Data = new ObservableCollection<ChartData>
+                {
+                    new ChartData { Name = "C", Height = 70, Time = DateTime.Now, InverterPower = 4, FeedinPower = 1, LoadPower = 3 }
+                }
+            });
+        }
 
-    
+        public void AddWeather()
+        {
+            Items.Add(new WeatherItem
+            {
+                Location = "Austin",
+                CurrentDate = DateTime.Today,
+                CurrentTemp = 25,
+                Forecast = new ObservableCollection<WeatherForecast>            
+                {
+                    new WeatherForecast { Icon = "sunny.png", Solar_rad = 200, Humidity = 60 }
+                }
+            });
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

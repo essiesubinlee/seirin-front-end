@@ -32,12 +32,43 @@ namespace seirin1.Data
         public double LoadPower { get; set; }
     }
 
+    
+    public class ChartData
+    {
+        public string Name { get; set; }
+        public double Height { get; set; }
+        public DateTime Time { get; set; }
+        public double InverterPower { get; set; }
+        public double FeedinPower { get; set; }
+        public double LoadPower { get; set; }
+    }
+
+    public class ChartItem
+    {
+        public string Title { get; set; }
+        public string Type { get; set; } // "line" or "column"
+        public ObservableCollection<ChartData> Data { get; set; }
+    }
+
+
     public class WeatherForecast
     {
-        public DateTime Date { get; set; }
-        public string Icon { get; set; }  // "sunny.png", "cloudy.png", etc.
+        public string Icon { get; set; }
         public double Temperature { get; set; }
-        public double MinTemp { get; set; }
+
+        public double Humidity { get; set; }
+        public double Solar_rad {get;set;}
+       
     }
+
+
+    public class WeatherItem
+    {
+        public string Location { get; set; }
+        public DateTime CurrentDate { get; set; }
+        public double CurrentTemp { get; set; }
+        public ObservableCollection<WeatherForecast> Forecast { get; set; }
+    }
+
 
 }
