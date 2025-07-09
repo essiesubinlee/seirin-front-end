@@ -3,6 +3,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using seirin1.ViewModels;
 
 namespace seirin1
 {
@@ -20,32 +21,69 @@ namespace seirin1
         {
 
             Items = new ObservableCollection<object>();
-            AddLineChartCommand = new Command(AddLineChart);
+            AddLineChartCommand = new Command(async () => await AddEnergyChart());
             AddColumnChartCommand = new Command(AddColumnChart);
             AddWeatherCommand = new Command(AddWeather);
             DeleteItemCommand = new Command<object>(DeleteItem);
 
+
             // Add some initial items for testing
-            AddLineChart();
+            AddEnergyChart();
             AddColumnChart();
             AddWeather();
 
         }
-        public void AddLineChart()
+        //public void AddLineChart()
+        //{
+        //    var lineChartData = new ChartData
+        //    {
+        //        Title = "Inverter Power Over Time",
+        //        Type = "LineChart",
+        //        Data = new ObservableCollection<ChartPoint>
+        //    {
+        //        new ChartPoint { Time = DateTime.Now.AddHours(-3), InverterPower = 50, Power = 40 },
+        //        new ChartPoint { Time = DateTime.Now.AddHours(-2), InverterPower = 70, Power = 20 },
+        //        new ChartPoint { Time = DateTime.Now.AddHours(-1), InverterPower = 60, Power = 80 },
+        //        new ChartPoint { Time = DateTime.Now, InverterPower = 90, Power = 20 }
+        //    }
+        //    };
+
+        //    Items.Add(lineChartData);
+        //}
+
+
+        public async Task AddEnergyChart()
         {
-            var lineChartData = new ChartData
+            try
             {
-                Title = "Inverter Power Over Time",
-                Type = "LineChart",
-                Data = new ObservableCollection<ChartPoint>
-            {
-                new ChartPoint { Time = DateTime.Now.AddHours(-3), InverterPower = 50 },
-                new ChartPoint { Time = DateTime.Now.AddHours(-2), InverterPower = 70 },
-                new ChartPoint { Time = DateTime.Now.AddHours(-1), InverterPower = 60 },
-                new ChartPoint { Time = DateTime.Now, InverterPower = 90 }
+                var energyData = await CsvReader.ReadEnergyCsvFile("data_2025-06-05.csv");
+
+                var recentData = energyData
+                    .OrderBy(e => e.Timestamp)
+                    .Take(100);
+
+                var chartData = new ChartData
+                {
+                    Title = "Energy",
+                    Type = "LineChart",
+                    Data = new ObservableCollection<ChartPoint>(
+                        recentData.Select(e => new ChartPoint
+                        {
+                            Time = e.Timestamp,
+                            SolarPower = e.SolarPower,
+                            BatteryPower = e.BatteryPower,
+                            LoadPower = e.LoadPower
+                        }))
+
+                };
+                Items.Add(chartData);
             }
-            };
-            Items.Add(lineChartData);
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading energy data: {ex.Message}");
+                // Fallback to sample data if real data fails
+            }
+
         }
 
         private void AddColumnChart()

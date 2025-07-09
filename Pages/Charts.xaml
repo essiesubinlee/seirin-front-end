@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:seirin1"
@@ -11,18 +11,29 @@
             <local:ChartWeatherTemplateSelector x:Key="ChartWeatherTemplateSelector">
                 <local:ChartWeatherTemplateSelector.LineChartTemplate>
                     <DataTemplate>
-                        <Grid WidthRequest="300" HeightRequest="250" Margin="10">
+                        <Grid MinimumWidthRequest="600" MinimumHeightRequest="400"
+                              WidthRequest="800" HeightRequest="500"
+                              Margin="20" HorizontalOptions="FillAndExpand">
                             <chart:SfCartesianChart>
                                 <chart:SfCartesianChart.Title>
-                                    <Label Text="{Binding Title}" HorizontalOptions="Center"/>
+                                    <Label Text="Power" HorizontalOptions="Center"/>
                                 </chart:SfCartesianChart.Title>
+
                                 <chart:SfCartesianChart.XAxes>
-                                    <chart:DateTimeAxis Name="TimeAxis"/>
+                                    <chart:DateTimeAxis>
+                                        <chart:DateTimeAxis.LabelStyle>
+                                            <chart:ChartAxisLabelStyle LabelFormat="HH:mm" />
+                                        </chart:DateTimeAxis.LabelStyle>
+                                    </chart:DateTimeAxis>
                                 </chart:SfCartesianChart.XAxes>
+
                                 <chart:SfCartesianChart.YAxes>
                                     <chart:NumericalAxis/>
                                 </chart:SfCartesianChart.YAxes>
-                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="InverterPower" />
+                                
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="SolarPower" Fill="Red" />
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="BatteryPower" Fill="Green"/>
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="LoadPower" Fill="Blue"/>
                             </chart:SfCartesianChart>
                             <Button Text="X" BackgroundColor="black" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked" />
                         </Grid>

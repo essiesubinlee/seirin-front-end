@@ -44,6 +44,13 @@ namespace seirin1.Data
     {
         public DateTime Time { get; set; } // For LineSeries XAxis
         public double InverterPower { get; set; } // For LineSeries YAxis
+        public double Power { get; set; }
+
+        public double SolarPower { get; set; }
+        public double BatteryPower { get; set; }
+        public double LoadPower { get; set; }
+
+
 
         public string Name { get; set; } // For ColumnSeries XAxis
         public double Height { get; set; } // For ColumnSeries YAxis
@@ -69,5 +76,25 @@ namespace seirin1.Data
         public ObservableCollection<WeatherForecast> Forecast { get; set; }
     }
 
+    public class EnergyData
+    {
+        public DateTime Timestamp { get; set; }
+        public double SolarVoltage { get; set; }
+        public double SolarCurrent { get; set; }
+        public double SolarPower { get; set; }
+        public double BatteryVoltage { get; set; }
+        public double BatteryCurrent { get; set; }
+        public double BatteryPower { get; set; }
+        public double LoadVoltage { get; set; }
+        public double LoadCurrent { get; set; }
+        public double LoadPower { get; set; }
+    }
+
+
+    public class BatteryInfo
+    {
+        public double SOC { get; set; }
+        public double BatteryTemp { get; set; }
+    }
 
 }
