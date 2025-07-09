@@ -81,6 +81,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiFont Update="C:\Users\raokm\.nuget\packages\syncfusion.maui.core\30.1.37\buildTransitive\..\buildTransitive\Resources\Fonts\MauiMaterialAssets.ttf" Link="Resources\Fonts\MauiMaterialAssets.ttf" />
+	  <MauiFont Update="C:\Users\raokm\.nuget\packages\syncfusion.maui.toolkit\1.0.5\buildTransitive\..\buildTransitive\Resources\Fonts\MauiMaterialAssets.ttf" Link="Resources\Fonts\MauiMaterialAssets.ttf" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Pages\DataTable.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

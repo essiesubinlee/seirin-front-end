@@ -21,7 +21,7 @@ namespace seirin1.tester
                 Console.WriteLine("\n--- First 5 rows ---");
                 foreach (var data in parsedData.Take(5)) // Print first 5 rows
                 {
-                    Console.WriteLine($"Timestamp: {data.Timestamp:yyyy-MM-dd HH:mm:ss}, " +
+                    Console.WriteLine($"Timestamp: {data.TimestampUTC:yyyy-MM-dd HH:mm:ss}, " +
                                       $"Solar Power: {data.SolarPower:F2}W, " +
                                       $"Load Power: {data.LoadPower:F2}W, " +
                                       $"Battery Power: {data.BatteryPower:F2}V");

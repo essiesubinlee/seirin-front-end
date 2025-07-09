@@ -63,7 +63,7 @@ namespace seirin1.ViewModels
                         {
                             energyDataList.Add(new EnergyData
                             {
-                                Timestamp = timestamp.UtcDateTime,
+                                TimestampUTC = timestamp.UtcDateTime,
                                 SolarPower = solarPower,
                                 SolarCurrent = solarCurrent,
                                 SolarVoltage = solarVoltage,

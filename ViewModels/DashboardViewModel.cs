@@ -1,15 +1,69 @@
-﻿using seirin1.Data;
+﻿
+using seirin1.Data;
+using seirin1.ViewModels;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using seirin1.ViewModels;
+
 
 namespace seirin1
 {
     public class DashboardViewModel : INotifyPropertyChanged
     {
-        public ObservableCollection<object> Items { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+
+        private DateTime _startDate = DateTime.UtcNow.Date.AddDays(-1);
+        private TimeSpan _startTime = TimeSpan.Zero;
+        private DateTime _endDate = DateTime.UtcNow.Date;
+        private TimeSpan _endTime = TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59));
+        private bool _isBusy;
+        //private TimeZoneInfo _selectedTimeZone = TimeZoneInfo.Utc;
+
+
+        public bool IsBusy
+        {
+            get => _isBusy;
+            set { _isBusy = value; OnPropertyChanged(); }
+        }
+
+        public DateTime StartDate
+        {
+            get => _startDate;
+            set { _startDate = value; OnPropertyChanged(); }
+        }
+
+        public TimeSpan StartTime
+        {
+            get => _startTime;
+            set { _startTime = value; OnPropertyChanged(); }
+        }
+
+        public DateTime EndDate
+        {
+            get => _endDate;
+            set { _endDate = value; OnPropertyChanged(); }
+        }
+        public TimeSpan EndTime
+        {
+            get => _endTime;
+            set { _endTime = value; OnPropertyChanged(); }
+        }
+
+        public DateTime CombinedStart => StartDate.Add(StartTime);
+        public DateTime CombinedEnd => EndDate.Add(EndTime);
+
+        public ObservableCollection<object> PowerItem { get; } = new ObservableCollection<object>();
+        public ObservableCollection<object> ColItem { get; } = new ObservableCollection<object>();
+        public ObservableCollection<object> WeatherItem { get; } = new ObservableCollection<object>();
+        public ObservableCollection<string> AvailableDates { get; } = new ObservableCollection<string>();
+        public ObservableCollection<TimeZoneInfo> AvailableTimeZones { get; } = new ObservableCollection<TimeZoneInfo>();
 
         public ICommand AddLineChartCommand { get; }
         public ICommand AddColumnChartCommand { get; }
@@ -17,10 +71,15 @@ namespace seirin1
         public ICommand DeleteItemCommand { get; }
 
 
+
+
         public DashboardViewModel()
         {
 
-            Items = new ObservableCollection<object>();
+            PowerItem = new ObservableCollection<object>();
+            ColItem = new ObservableCollection<object>();
+            WeatherItem = new ObservableCollection<object>();
+
             AddLineChartCommand = new Command(async () => await AddEnergyChart());
             AddColumnChartCommand = new Command(AddColumnChart);
             AddWeatherCommand = new Command(AddWeather);
@@ -33,57 +92,68 @@ namespace seirin1
             AddWeather();
 
         }
-        //public void AddLineChart()
-        //{
-        //    var lineChartData = new ChartData
-        //    {
-        //        Title = "Inverter Power Over Time",
-        //        Type = "LineChart",
-        //        Data = new ObservableCollection<ChartPoint>
-        //    {
-        //        new ChartPoint { Time = DateTime.Now.AddHours(-3), InverterPower = 50, Power = 40 },
-        //        new ChartPoint { Time = DateTime.Now.AddHours(-2), InverterPower = 70, Power = 20 },
-        //        new ChartPoint { Time = DateTime.Now.AddHours(-1), InverterPower = 60, Power = 80 },
-        //        new ChartPoint { Time = DateTime.Now, InverterPower = 90, Power = 20 }
-        //    }
-        //    };
-
-        //    Items.Add(lineChartData);
-        //}
+  
 
 
         public async Task AddEnergyChart()
         {
             try
             {
-                var energyData = await CsvReader.ReadEnergyCsvFile("data_2025-06-05.csv");
+                IsBusy = true;
 
-                var recentData = energyData
-                    .OrderBy(e => e.Timestamp)
-                    .Take(100);
-
-                var chartData = new ChartData
+                var dates = GetDateRange(CombinedStart.Date, CombinedEnd.Date);
+                var allData = new List<EnergyData>();
+                
+                foreach (var date in dates)
                 {
-                    Title = "Energy",
-                    Type = "LineChart",
-                    Data = new ObservableCollection<ChartPoint>(
-                        recentData.Select(e => new ChartPoint
-                        {
-                            Time = e.Timestamp,
-                            SolarPower = e.SolarPower,
-                            BatteryPower = e.BatteryPower,
-                            LoadPower = e.LoadPower
-                        }))
+                    var filename = $"data_{date:yyyy-MM-dd}.csv";
+                    var fileData = await CsvReader.ReadEnergyCsvFile(filename);
+                    allData.AddRange(fileData);
+                }
 
-                };
-                Items.Add(chartData);
+
+                var filteredData = allData
+                .Where(d => d.TimestampUTC >= CombinedStart && d.TimestampUTC <= CombinedEnd)
+                .OrderBy(d => d.TimestampUTC)
+                .ToList();
+
+                UpdateCharts(filteredData);
             }
-            catch (Exception ex)
+            finally
             {
-                Console.WriteLine($"Error loading energy data: {ex.Message}");
-                // Fallback to sample data if real data fails
+                IsBusy = false;
             }
 
+
+        }
+
+        private IEnumerable<DateTime> GetDateRange(DateTime start, DateTime end)
+        {
+            for (var date = start; date <= end; date = date.AddDays(1))
+                yield return date;
+        }
+
+        private void UpdateCharts(List<EnergyData> data)
+        {
+            // Clear existing charts
+            PowerItem.Clear();
+
+            // Create new chart with filtered data
+            var chartData = new ChartData
+            {
+                Title = $"Energy Data ({CombinedStart:g} - {CombinedEnd:g})",
+                Type = "LineChart",
+                Data = new ObservableCollection<ChartPoint>(
+                    data.Select(d => new ChartPoint
+                    {
+                        Time = d.TimestampUTC,
+                        SolarPower = d.SolarPower,
+                        BatteryPower = d.BatteryPower,
+                        LoadPower = d.LoadPower
+                    }))
+            };
+
+            PowerItem.Add(chartData);
         }
 
         private void AddColumnChart()
@@ -100,14 +170,14 @@ namespace seirin1
                 new ChartPoint { Name = "Product D", Height = 90 }
             }
             };
-            Items.Add(columnChartData);
+            ColItem.Add(columnChartData);
         }
 
 
         private void AddWeather()
         {
             // ... (your existing weather data creation)
-            Items.Add(new WeatherData
+            WeatherItem.Add(new WeatherData
             {
                 Location = "Austin, TX",
                 CurrentDate = DateTime.Now,
@@ -121,12 +191,20 @@ namespace seirin1
 
         private void DeleteItem(object item)
         {
-            if (Items.Contains(item))
+            if (PowerItem.Contains(item))
             {
-                Items.Remove(item);
+                PowerItem.Remove(item);
+            }
+            if(ColItem.Contains(item))
+            {
+                ColItem.Remove(item);
+            }
+            if(WeatherItem.Contains(item))
+            {
+                WeatherItem.Remove(item);
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        
     }
 }

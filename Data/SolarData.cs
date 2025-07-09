@@ -78,7 +78,8 @@ namespace seirin1.Data
 
     public class EnergyData
     {
-        public DateTime Timestamp { get; set; }
+        public DateTime TimestampUTC { get; set; }
+        public DateTime LocalTimestamp => TimestampUTC.ToLocalTime();
         public double SolarVoltage { get; set; }
         public double SolarCurrent { get; set; }
         public double SolarPower { get; set; }
@@ -97,4 +98,9 @@ namespace seirin1.Data
         public double BatteryTemp { get; set; }
     }
 
+    public abstract class ChartContainer
+    {
+        public string Title { get; set; }
+        public string Type { get; protected set; }
+    }
 }

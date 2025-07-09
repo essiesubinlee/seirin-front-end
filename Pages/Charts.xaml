@@ -96,19 +96,72 @@
 
     <ScrollView>
         <StackLayout>
-            <HorizontalStackLayout Margin="10">
-                <Button Text="Add Line Chart" Clicked="OnAddLineChartClicked" />
-                <Button Text="Add Bar Chart" Clicked="OnAddColumnChartClicked" />
-                <Button Text="Add Weather" Clicked="OnAddWeatherClicked" />
+            <HorizontalStackLayout Spacing="10" Margin="10" VerticalOptions="Center">
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Date Range:" FontAttributes="Bold"/>
+                    <HorizontalStackLayout Spacing="10">
+
+                        <DatePicker x:Name="StartDatePicker" 
+                            MinimumDate="01/01/2020"
+                            MaximumDate="{Binding Source={x:Reference EndDatePicker}, Path=Date}"
+                            Date="{Binding StartDate}"/>
+                        <TimePicker Time="{Binding StartTime}"
+                                  
+                               Format="HH:mm"/>
+
+                        <DatePicker x:Name="EndDatePicker" 
+                            MinimumDate="{Binding Source={x:Reference StartDatePicker}, Path=Date}"
+                            MaximumDate="{Binding Today}"
+                            Date="{Binding EndDate}"/>
+
+                        <TimePicker Time="{Binding EndTime}"
+                               Format="HH:mm"/>
+
+
+                        <Button Text="Apply Range" 
+                            Command="{Binding ApplyRangeCommand}"
+                            VerticalOptions="Center"/>
+
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Divider -->
+                <BoxView Color="LightGray" WidthRequest="1" HeightRequest="40"/>
+
+                <VerticalStackLayout Spacing="5">
+                    <Label Text="Add Charts:" FontAttributes="Bold"/>
+                    <HorizontalStackLayout Spacing="10">
+                        <Button Text="Add Line Chart" Clicked="OnAddLineChartClicked" />
+                        <Button Text="Add Bar Chart" Clicked="OnAddColumnChartClicked" />
+                        <Button Text="Add Weather" Clicked="OnAddWeatherClicked" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
             </HorizontalStackLayout>
 
-            <FlexLayout BindableLayout.ItemsSource="{Binding Items}"
+            <FlexLayout BindableLayout.ItemsSource="{Binding PowerItem}"
                         BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
                         Wrap="Wrap"
                         Direction="Row"
                         JustifyContent="Start"
                         AlignItems="Start"
                         Margin="10"/>
+
+            <FlexLayout BindableLayout.ItemsSource="{Binding ColItem}"
+            BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+            Wrap="Wrap"
+            Direction="Row"
+            JustifyContent="Start"
+            AlignItems="Start"
+            Margin="10"/>
+
+            <FlexLayout BindableLayout.ItemsSource="{Binding WeatherItem}"
+            BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+            Wrap="Wrap"
+            Direction="Row"
+            JustifyContent="Start"
+            AlignItems="Start"
+            Margin="10"/>
         </StackLayout>
+        
     </ScrollView>
 </ContentPage>
