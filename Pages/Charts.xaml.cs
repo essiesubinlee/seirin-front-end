@@ -11,13 +11,24 @@ public partial class Charts : ContentPage
 
     private void OnAddLineChartClicked(object sender, EventArgs e)
     {
-        ViewModel?.AddLineChartCommand.Execute(null);
+        ViewModel?.AddPowerLineChartCommand.Execute(null);
     }
 
-    private void OnAddColumnChartClicked(object sender, EventArgs e)
+    private void OnAddCurrentChartClicked(object sender, EventArgs e)
     {
-        ViewModel?.AddColumnChartCommand.Execute(null);
+        ViewModel?.AddCurrentLineChartCommand.Execute(null);
     }
+
+    private void OnAddVoltageChartClicked(object sender, EventArgs e)
+    {
+        ViewModel?.AddVoltageLineChartCommand.Execute(null);
+    }
+    private void OnAddSolarRadChartClicked(object sender, EventArgs e)
+    {
+        ViewModel?.AddSolarRadLineChartCommand.Execute(null);
+    }
+
+    
 
     private void OnAddWeatherClicked(object sender, EventArgs e)
     {

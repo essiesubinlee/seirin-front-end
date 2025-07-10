@@ -16,7 +16,7 @@
                               Margin="20" HorizontalOptions="FillAndExpand">
                             <chart:SfCartesianChart>
                                 <chart:SfCartesianChart.Title>
-                                    <Label Text="Power" HorizontalOptions="Center"/>
+                                    <Label Text="{Binding Title}" HorizontalOptions="Center"/>
                                 </chart:SfCartesianChart.Title>
 
                                 <chart:SfCartesianChart.XAxes>
@@ -31,9 +31,11 @@
                                     <chart:NumericalAxis/>
                                 </chart:SfCartesianChart.YAxes>
                                 
-                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="SolarPower" Fill="Red" />
-                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="BatteryPower" Fill="Green"/>
-                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="LoadPower" Fill="Blue"/>
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Solar" Fill="Red" />
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Battery" Fill="Green"/>
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Load" Fill="Blue"/>
+                                <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Forecast" Fill="Black" />
+                                
                             </chart:SfCartesianChart>
                             <Button Text="X" BackgroundColor="black" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked" />
                         </Grid>
@@ -117,26 +119,29 @@
                         <TimePicker Time="{Binding EndTime}"
                                Format="HH:mm"/>
 
-
-                        <Button Text="Apply Range" 
-                            Command="{Binding ApplyRangeCommand}"
-                            VerticalOptions="Center"/>
-
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
 
                 <!-- Divider -->
                 <BoxView Color="LightGray" WidthRequest="1" HeightRequest="40"/>
 
-                <VerticalStackLayout Spacing="5">
+                <VerticalStackLayout Spacing="10">
                     <Label Text="Add Charts:" FontAttributes="Bold"/>
                     <HorizontalStackLayout Spacing="10">
-                        <Button Text="Add Line Chart" Clicked="OnAddLineChartClicked" />
-                        <Button Text="Add Bar Chart" Clicked="OnAddColumnChartClicked" />
+                        <Button Text="Add/Update Power Chart" Clicked="OnAddLineChartClicked" />
+                        <Button Text="Add/Update Current Chart" Clicked="OnAddCurrentChartClicked" />
+                        <Button Text="Add/Update Voltage Chart" Clicked="OnAddVoltageChartClicked"/>
                         <Button Text="Add Weather" Clicked="OnAddWeatherClicked" />
+                    </HorizontalStackLayout>
+                    <HorizontalStackLayout Spacing="10">
+                        <Button Text="Add/Update Temperatrue" Clicked="OnAddLineChartClicked" />
+                        <Button Text="Add/Update Solar Radiation" Clicked="OnAddSolarRadChartClicked" />
+                        <Button Text="Add/Update Humidity" Clicked="OnAddVoltageChartClicked"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
+
+            
 
             <FlexLayout BindableLayout.ItemsSource="{Binding PowerItem}"
                         BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
@@ -146,13 +151,30 @@
                         AlignItems="Start"
                         Margin="10"/>
 
-            <FlexLayout BindableLayout.ItemsSource="{Binding ColItem}"
-            BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
-            Wrap="Wrap"
-            Direction="Row"
-            JustifyContent="Start"
-            AlignItems="Start"
-            Margin="10"/>
+            <FlexLayout BindableLayout.ItemsSource="{Binding CurrentItem}"
+                BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                Wrap="Wrap"
+                Direction="Row"
+                JustifyContent="Start"
+                AlignItems="Start"
+                Margin="10"/>
+
+            <FlexLayout BindableLayout.ItemsSource="{Binding VoltageItem}"
+                BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                Wrap="Wrap"
+                Direction="Row"
+                JustifyContent="Start"
+                AlignItems="Start"
+                Margin="10"/>
+
+            <FlexLayout BindableLayout.ItemsSource="{Binding SolarRadItem}"
+                BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                Wrap="Wrap"
+                Direction="Row"
+                JustifyContent="Start"
+                AlignItems="Start"
+                Margin="10"/>
+
 
             <FlexLayout BindableLayout.ItemsSource="{Binding WeatherItem}"
             BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"

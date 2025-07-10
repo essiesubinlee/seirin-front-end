@@ -60,13 +60,22 @@ namespace seirin1
         public DateTime CombinedEnd => EndDate.Add(EndTime);
 
         public ObservableCollection<object> PowerItem { get; } = new ObservableCollection<object>();
-        public ObservableCollection<object> ColItem { get; } = new ObservableCollection<object>();
+
+        public ObservableCollection<object> CurrentItem { get; } = new ObservableCollection<object>();
+        public ObservableCollection<object> VoltageItem { get; } = new ObservableCollection<object>();
+        public ObservableCollection<object> SolarRadItem { get; } = new ObservableCollection<object>();
         public ObservableCollection<object> WeatherItem { get; } = new ObservableCollection<object>();
         public ObservableCollection<string> AvailableDates { get; } = new ObservableCollection<string>();
         public ObservableCollection<TimeZoneInfo> AvailableTimeZones { get; } = new ObservableCollection<TimeZoneInfo>();
 
-        public ICommand AddLineChartCommand { get; }
-        public ICommand AddColumnChartCommand { get; }
+        public ICommand AddPowerLineChartCommand { get; }
+        public ICommand AddCurrentLineChartCommand { get; }
+        public ICommand AddVoltageLineChartCommand { get; }
+
+        public ICommand AddTempLineChartCommand { get; }
+
+        public ICommand AddSolarRadLineChartCommand { get; }
+
         public ICommand AddWeatherCommand { get; }
         public ICommand DeleteItemCommand { get; }
 
@@ -77,25 +86,33 @@ namespace seirin1
         {
 
             PowerItem = new ObservableCollection<object>();
-            ColItem = new ObservableCollection<object>();
+            VoltageItem = new ObservableCollection<object>();
             WeatherItem = new ObservableCollection<object>();
+            CurrentItem = new ObservableCollection<object>();
+            SolarRadItem = new ObservableCollection<object>();
 
-            AddLineChartCommand = new Command(async () => await AddEnergyChart());
-            AddColumnChartCommand = new Command(AddColumnChart);
-            AddWeatherCommand = new Command(AddWeather);
+            AddPowerLineChartCommand = new Command(async () => await AddLineChart("power"));
+            AddCurrentLineChartCommand = new Command(async() => await AddLineChart("current"));
+            AddVoltageLineChartCommand = new Command(async () => await AddLineChart("voltage"));
+            //AddColumnChartCommand = new Command(AddColumnChart);
+
+            AddSolarRadLineChartCommand = new Command(async() => await AddLineChart("solarRad"));
+
+            //AddWeatherCommand = new Command(AddWeather);
             DeleteItemCommand = new Command<object>(DeleteItem);
 
 
             // Add some initial items for testing
-            AddEnergyChart();
-            AddColumnChart();
-            AddWeather();
+            AddLineChart("power");
+            //AddCurrentChart();
+            //AddColumnChart();
+            //AddWeather();
 
         }
   
 
 
-        public async Task AddEnergyChart()
+        public async Task AddLineChart(string type)
         {
             try
             {
@@ -116,8 +133,23 @@ namespace seirin1
                 .Where(d => d.TimestampUTC >= CombinedStart && d.TimestampUTC <= CombinedEnd)
                 .OrderBy(d => d.TimestampUTC)
                 .ToList();
-
-                UpdateCharts(filteredData);
+                if (type == "power")
+                {
+                    UpdatePowerCharts(filteredData);
+                }
+                else if(type == "current")
+                {
+                    UpdateCurrentCharts(filteredData);
+                }
+                else if (type == "voltage")
+                {
+                    UpdateVoltageCharts(filteredData);
+                }
+                else if (type == "solarRad")
+                {
+                    UpdateSolarRadCharts(filteredData);
+                }
+         
             }
             finally
             {
@@ -133,7 +165,7 @@ namespace seirin1
                 yield return date;
         }
 
-        private void UpdateCharts(List<EnergyData> data)
+        private void UpdatePowerCharts(List<EnergyData> data)
         {
             // Clear existing charts
             PowerItem.Clear();
@@ -141,53 +173,123 @@ namespace seirin1
             // Create new chart with filtered data
             var chartData = new ChartData
             {
-                Title = $"Energy Data ({CombinedStart:g} - {CombinedEnd:g})",
+                Title = $"Power Data ({CombinedStart:g} - {CombinedEnd:g})",
                 Type = "LineChart",
-                Data = new ObservableCollection<ChartPoint>(
-                    data.Select(d => new ChartPoint
+                Data = new ObservableCollection<PowerPoints>(
+                    data.Select(d => new PowerPoints
                     {
                         Time = d.TimestampUTC,
-                        SolarPower = d.SolarPower,
-                        BatteryPower = d.BatteryPower,
-                        LoadPower = d.LoadPower
+                        Solar = d.SolarPower,
+                        Battery = d.BatteryPower,
+                        Load = d.LoadPower
                     }))
             };
 
             PowerItem.Add(chartData);
         }
 
-        private void AddColumnChart()
+        private void UpdateCurrentCharts(List<EnergyData> data)
         {
-            var columnChartData = new ChartData
+            // Clear existing charts
+            CurrentItem.Clear();
+
+            // Create new chart with filtered data
+            var chartData = new ChartData
             {
-                Title = "Product Sales",
-                Type = "ColumnChart",
-                Data = new ObservableCollection<ChartPoint>
-            {
-                new ChartPoint { Name = "Product A", Height = 120 },
-                new ChartPoint { Name = "Product B", Height = 180 },
-                new ChartPoint { Name = "Product C", Height = 150 },
-                new ChartPoint { Name = "Product D", Height = 90 }
-            }
+                Title = $"Current Data ({CombinedStart:g} - {CombinedEnd:g})",
+                Type = "LineChart",
+                Data = new ObservableCollection<PowerPoints>(
+                    data.Select(d => new PowerPoints
+                    {
+                        Time = d.TimestampUTC,
+                        Solar = d.SolarCurrent,
+                        Battery = d.BatteryCurrent,
+                        Load = d.LoadCurrent
+                    }))
             };
-            ColItem.Add(columnChartData);
+
+            CurrentItem.Add(chartData);
         }
 
-
-        private void AddWeather()
+        private void UpdateVoltageCharts(List<EnergyData> data)
         {
-            // ... (your existing weather data creation)
-            WeatherItem.Add(new WeatherData
+            // Clear existing charts
+            VoltageItem.Clear();
+
+            // Create new chart with filtered data
+            var chartData = new ChartData
             {
-                Location = "Austin, TX",
-                CurrentDate = DateTime.Now,
-                CurrentTemp = 30,
-                Forecast = new ObservableCollection<WeatherForecast>
-            {
-                new WeatherForecast { Humidity = 60, Solar_rad = 800 }
-            }
-            });
+                Title = $"Voltage Data ({CombinedStart:g} - {CombinedEnd:g})",
+                Type = "LineChart",
+                Data = new ObservableCollection<PowerPoints>(
+                    data.Select(d => new PowerPoints
+                    {
+                        Time = d.TimestampUTC,
+                        Solar = d.SolarVoltage,
+                        Battery = d.BatteryVoltage,
+                        Load = d.LoadVoltage
+                    }))
+            };
+
+            VoltageItem.Add(chartData);
         }
+
+        private void UpdateSolarRadCharts(List<EnergyData> data)
+        {
+            SolarRadItem.Clear();
+
+            var chartData = new ChartData
+            {
+                Title = $"Solar Radiation Data ({CombinedStart:g} - {CombinedEnd:g})",
+                Type = "LineChart",
+                Data = new ObservableCollection<PowerPoints>(
+                    data.Select(d => new PowerPoints
+                    {
+                        Time = d.TimestampUTC,
+                        Solar = d.SolarRadiation,
+                        Battery = float.NaN,  // This will hide the line
+                        Load = float.NaN
+                    }))
+            };
+
+            SolarRadItem.Add(chartData);
+        }
+
+
+
+
+        //private void AddColumnChart()
+        //{
+        //    var columnChartData = new ChartData
+        //    {
+        //        Title = "Product Sales",
+        //        Type = "ColumnChart",
+        //        Data = new ObservableCollection<ChartPoint>
+        //    {
+        //        new ChartPoint { Name = "Product A", Height = 120 },
+        //        new ChartPoint { Name = "Product B", Height = 180 },
+        //        new ChartPoint { Name = "Product C", Height = 150 },
+        //        new ChartPoint { Name = "Product D", Height = 90 }
+        //    }
+        //    };
+        //    ColItem.Add(columnChartData);
+        //}
+
+
+        //private void AddWeather()
+        //{
+        //    // ... (your existing weather data creation)
+        //    WeatherItem.Add(new WeatherData
+        //    {
+        //        Location = "Austin, TX",
+        //        CurrentDate = DateTime.Now,
+        //        CurrentTemp = 30,
+        //        Forecast = new ObservableCollection<WeatherForecast>
+        //    {
+        //        new WeatherForecast { Humidity = 60, Solar_rad = 800 }
+        //    }
+        //    });
+        //}
 
         private void DeleteItem(object item)
         {
@@ -195,13 +297,21 @@ namespace seirin1
             {
                 PowerItem.Remove(item);
             }
-            if(ColItem.Contains(item))
+            if(VoltageItem.Contains(item))
             {
-                ColItem.Remove(item);
+                VoltageItem.Remove(item);
             }
             if(WeatherItem.Contains(item))
             {
                 WeatherItem.Remove(item);
+            }
+            if (CurrentItem.Contains(item))
+            {
+                CurrentItem.Remove(item);
+            }
+            if (SolarRadItem.Contains(item))
+            {
+                SolarRadItem.Remove(item);
             }
         }
 

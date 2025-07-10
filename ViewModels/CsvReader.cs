@@ -72,8 +72,13 @@ namespace seirin1.ViewModels
                                 LoadPower = loadPower,
                                 BatteryCurrent = batteryCurrent,
                                 BatteryPower = batteryPower,
-                                BatteryVoltage = batteryVoltage
+                                BatteryVoltage = batteryVoltage,
+
+                                Temperature = temp,
+                                Humidity = humidity,
+                                SolarRadiation = solarRad
                             });
+
                         }
                         else
                         {
