@@ -64,6 +64,8 @@ namespace seirin1
         public ObservableCollection<object> CurrentItem { get; } = new ObservableCollection<object>();
         public ObservableCollection<object> VoltageItem { get; } = new ObservableCollection<object>();
         public ObservableCollection<object> SolarRadItem { get; } = new ObservableCollection<object>();
+        public ObservableCollection<object> TempItem { get; } = new ObservableCollection<object>();
+        public ObservableCollection<object> HumidityItem { get; } = new ObservableCollection<object>();
         public ObservableCollection<object> WeatherItem { get; } = new ObservableCollection<object>();
         public ObservableCollection<string> AvailableDates { get; } = new ObservableCollection<string>();
         public ObservableCollection<TimeZoneInfo> AvailableTimeZones { get; } = new ObservableCollection<TimeZoneInfo>();
@@ -73,6 +75,7 @@ namespace seirin1
         public ICommand AddVoltageLineChartCommand { get; }
 
         public ICommand AddTempLineChartCommand { get; }
+        public ICommand AddHumidityLineChartCommand { get; }
 
         public ICommand AddSolarRadLineChartCommand { get; }
 
@@ -90,6 +93,8 @@ namespace seirin1
             WeatherItem = new ObservableCollection<object>();
             CurrentItem = new ObservableCollection<object>();
             SolarRadItem = new ObservableCollection<object>();
+            TempItem = new ObservableCollection<object>();
+            HumidityItem = new ObservableCollection<object>();
 
             AddPowerLineChartCommand = new Command(async () => await AddLineChart("power"));
             AddCurrentLineChartCommand = new Command(async() => await AddLineChart("current"));
@@ -97,6 +102,8 @@ namespace seirin1
             //AddColumnChartCommand = new Command(AddColumnChart);
 
             AddSolarRadLineChartCommand = new Command(async() => await AddLineChart("solarRad"));
+            AddTempLineChartCommand = new Command(async () => await AddLineChart("temp"));
+            AddHumidityLineChartCommand = new Command(async () => await AddLineChart("humidity"));
 
             //AddWeatherCommand = new Command(AddWeather);
             DeleteItemCommand = new Command<object>(DeleteItem);
@@ -104,6 +111,7 @@ namespace seirin1
 
             // Add some initial items for testing
             AddLineChart("power");
+            AddLineChart("solarRad");
             //AddCurrentChart();
             //AddColumnChart();
             //AddWeather();
@@ -149,6 +157,14 @@ namespace seirin1
                 {
                     UpdateSolarRadCharts(filteredData);
                 }
+                else if (type == "temp")
+                {
+                    UpdateTempCharts(filteredData);
+                }
+                else if (type == "humidity")
+                {
+                    UpdateHumidityCharts(filteredData);
+                }
          
             }
             finally
@@ -159,6 +175,7 @@ namespace seirin1
 
         }
 
+       
         private IEnumerable<DateTime> GetDateRange(DateTime start, DateTime end)
         {
             for (var date = start; date <= end; date = date.AddDays(1))
@@ -255,6 +272,48 @@ namespace seirin1
             SolarRadItem.Add(chartData);
         }
 
+        private void UpdateTempCharts(List<EnergyData> data)
+        {
+            TempItem.Clear();
+
+            var chartData = new ChartData
+            {
+                Title = $"Temperature Data ({CombinedStart:g} - {CombinedEnd:g})",
+                Type = "LineChart",
+                Data = new ObservableCollection<PowerPoints>(
+                    data.Select(d => new PowerPoints
+                    {
+                        Time = d.TimestampUTC,
+                        Solar = d.Temperature,
+                        Battery = float.NaN,  // This will hide the line
+                        Load = float.NaN
+                    }))
+            };
+
+            TempItem.Add(chartData);
+        }
+
+        private void UpdateHumidityCharts(List<EnergyData> data)
+        {
+            HumidityItem.Clear();
+
+            var chartData = new ChartData
+            {
+                Title = $"Humidity Data ({CombinedStart:g} - {CombinedEnd:g})",
+                Type = "LineChart",
+                Data = new ObservableCollection<PowerPoints>(
+                    data.Select(d => new PowerPoints
+                    {
+                        Time = d.TimestampUTC,
+                        Solar = d.Humidity,
+                        Battery = float.NaN,  // This will hide the line
+                        Load = float.NaN
+                    }))
+            };
+
+            HumidityItem.Add(chartData);
+        }
+
 
 
 
@@ -312,6 +371,14 @@ namespace seirin1
             if (SolarRadItem.Contains(item))
             {
                 SolarRadItem.Remove(item);
+            }
+            if (TempItem.Contains(item))
+            {
+                TempItem.Remove(item);
+            }
+            if (HumidityItem.Contains(item))
+            {
+                HumidityItem.Remove(item);
             }
         }
 

@@ -27,8 +27,16 @@ public partial class Charts : ContentPage
     {
         ViewModel?.AddSolarRadLineChartCommand.Execute(null);
     }
+    private void OnAddTempChartClicked(object sender, EventArgs e)
+    {
+        ViewModel?.AddTempLineChartCommand.Execute(null);
+    }
+    private void OnAddHumidityChartClicked(object sender, EventArgs e)
+    {
+        ViewModel?.AddHumidityLineChartCommand.Execute(null);
+    }
 
-    
+
 
     private void OnAddWeatherClicked(object sender, EventArgs e)
     {

@@ -11,8 +11,8 @@
             <local:ChartWeatherTemplateSelector x:Key="ChartWeatherTemplateSelector">
                 <local:ChartWeatherTemplateSelector.LineChartTemplate>
                     <DataTemplate>
-                        <Grid MinimumWidthRequest="600" MinimumHeightRequest="400"
-                              WidthRequest="800" HeightRequest="500"
+                        <Grid MinimumWidthRequest="300" MinimumHeightRequest="400"
+                              WidthRequest="700" HeightRequest="500"
                               Margin="20" HorizontalOptions="FillAndExpand">
                             <chart:SfCartesianChart>
                                 <chart:SfCartesianChart.Title>
@@ -131,19 +131,29 @@
                         <Button Text="Add/Update Power Chart" Clicked="OnAddLineChartClicked" />
                         <Button Text="Add/Update Current Chart" Clicked="OnAddCurrentChartClicked" />
                         <Button Text="Add/Update Voltage Chart" Clicked="OnAddVoltageChartClicked"/>
-                        <Button Text="Add Weather" Clicked="OnAddWeatherClicked" />
                     </HorizontalStackLayout>
+                    
                     <HorizontalStackLayout Spacing="10">
-                        <Button Text="Add/Update Temperatrue" Clicked="OnAddLineChartClicked" />
+                        <Button Text="Add/Update Temperatrue" Clicked="OnAddTempChartClicked" />
                         <Button Text="Add/Update Solar Radiation" Clicked="OnAddSolarRadChartClicked" />
-                        <Button Text="Add/Update Humidity" Clicked="OnAddVoltageChartClicked"/>
+                        <Button Text="Add/Update Humidity" Clicked="OnAddHumidityChartClicked"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </HorizontalStackLayout>
 
-            
 
-            <FlexLayout BindableLayout.ItemsSource="{Binding PowerItem}"
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <!-- Solar data -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Weather data -->
+                </Grid.ColumnDefinitions>
+
+
+                <VerticalStackLayout Grid.Column="0">
+
+                    <FlexLayout BindableLayout.ItemsSource="{Binding PowerItem}"
                         BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
                         Wrap="Wrap"
                         Direction="Row"
@@ -151,38 +161,51 @@
                         AlignItems="Start"
                         Margin="10"/>
 
-            <FlexLayout BindableLayout.ItemsSource="{Binding CurrentItem}"
-                BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
-                Wrap="Wrap"
-                Direction="Row"
-                JustifyContent="Start"
-                AlignItems="Start"
-                Margin="10"/>
+                    <FlexLayout BindableLayout.ItemsSource="{Binding CurrentItem}"
+                        BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                        Wrap="Wrap"
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Start"
+                        Margin="10"/>
 
-            <FlexLayout BindableLayout.ItemsSource="{Binding VoltageItem}"
-                BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
-                Wrap="Wrap"
-                Direction="Row"
-                JustifyContent="Start"
-                AlignItems="Start"
-                Margin="10"/>
+                    <FlexLayout BindableLayout.ItemsSource="{Binding VoltageItem}"
+                        BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                        Wrap="Wrap"
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Start"
+                        Margin="10"/>
+                </VerticalStackLayout>
 
-            <FlexLayout BindableLayout.ItemsSource="{Binding SolarRadItem}"
-                BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
-                Wrap="Wrap"
-                Direction="Row"
-                JustifyContent="Start"
-                AlignItems="Start"
-                Margin="10"/>
+                <VerticalStackLayout Grid.Column="1">
+                    <FlexLayout BindableLayout.ItemsSource="{Binding TempItem}"
+                        BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                        Wrap="Wrap"
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Start"
+                        Margin="10"/>
 
 
-            <FlexLayout BindableLayout.ItemsSource="{Binding WeatherItem}"
-            BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
-            Wrap="Wrap"
-            Direction="Row"
-            JustifyContent="Start"
-            AlignItems="Start"
-            Margin="10"/>
+                    <FlexLayout BindableLayout.ItemsSource="{Binding SolarRadItem}"
+                        BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                        Wrap="Wrap"
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Start"
+                        Margin="10"/>
+
+                    <FlexLayout BindableLayout.ItemsSource="{Binding HumidityItem}"
+                        BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                        Wrap="Wrap"
+                        Direction="Row"
+                        JustifyContent="Start"
+                        AlignItems="Start"
+                        Margin="10"/>
+                </VerticalStackLayout>
+
+            </Grid>
         </StackLayout>
         
     </ScrollView>
