@@ -9,6 +9,27 @@ public partial class Charts : ContentPage
         InitializeComponent();
     }
 
+    private double panX, panY;
+    void OnPanUpdated(object sender, PanUpdatedEventArgs e)
+    {
+        switch (e.StatusType)
+        {
+            case GestureStatus.Running:
+                // Translate and pan.
+                double boundsX = Content.Width;
+                double boundsY = Content.Height;
+                Content.TranslationX = Math.Clamp(panX + e.TotalX, -boundsX, boundsX);
+                Content.TranslationY = Math.Clamp(panY + e.TotalY, -boundsY, boundsY);
+                break;
+
+            case GestureStatus.Completed:
+                // Store the translation applied during the pan
+                panX = Content.TranslationX;
+                panY = Content.TranslationY;
+                break;
+        }
+    }
+
     private void OnAddLineChartClicked(object sender, EventArgs e)
     {
         ViewModel?.AddPowerLineChartCommand.Execute(null);

@@ -18,6 +18,10 @@
                                 <chart:SfCartesianChart.Title>
                                     <Label Text="{Binding Title}" HorizontalOptions="Center"/>
                                 </chart:SfCartesianChart.Title>
+                                
+                                <chart:SfCartesianChart.ZoomPanBehavior>
+                                    <chart:ChartZoomPanBehavior EnableSelectionZooming ="True"  ZoomMode="XY" />
+                                </chart:SfCartesianChart.ZoomPanBehavior>
 
                                 <chart:SfCartesianChart.XAxes>
                                     <chart:DateTimeAxis>
@@ -30,12 +34,16 @@
                                 <chart:SfCartesianChart.YAxes>
                                     <chart:NumericalAxis/>
                                 </chart:SfCartesianChart.YAxes>
+
+                                <chart:SfCartesianChart.GestureRecognizers>
+                                    <PanGestureRecognizer PanUpdated="OnPanUpdated" />
+                                </chart:SfCartesianChart.GestureRecognizers>
                                 
                                 <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Solar" Fill="Red" />
                                 <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Battery" Fill="Green"/>
                                 <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Load" Fill="Blue"/>
                                 <chart:LineSeries ItemsSource="{Binding Data}" XAxisName="TimeAxis" XBindingPath="Time" YBindingPath="Forecast" Fill="Black" />
-                                
+
                             </chart:SfCartesianChart>
                             <Button Text="X" BackgroundColor="black" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked" />
                         </Grid>
@@ -132,7 +140,7 @@
                         <Button Text="Add/Update Current Chart" Clicked="OnAddCurrentChartClicked" />
                         <Button Text="Add/Update Voltage Chart" Clicked="OnAddVoltageChartClicked"/>
                     </HorizontalStackLayout>
-                    
+
                     <HorizontalStackLayout Spacing="10">
                         <Button Text="Add/Update Temperatrue" Clicked="OnAddTempChartClicked" />
                         <Button Text="Add/Update Solar Radiation" Clicked="OnAddSolarRadChartClicked" />
@@ -149,6 +157,7 @@
                     <ColumnDefinition Width="*" />
                     <!-- Weather data -->
                 </Grid.ColumnDefinitions>
+
 
 
                 <VerticalStackLayout Grid.Column="0">
@@ -207,6 +216,6 @@
 
             </Grid>
         </StackLayout>
-        
+
     </ScrollView>
 </ContentPage>

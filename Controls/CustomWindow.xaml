@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Border xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+        x:Class="seirin1.Controls.CustomWindow"
+        BackgroundColor="White"
+        Stroke="LightGray"
+        StrokeThickness="4"
+        StrokeShape="RoundRectangle 5"
+        Padding="0"
+        MinimumWidthRequest="150"
+        MinimumHeightRequest="100">
+
+    <Grid RowDefinitions="Auto, *, Auto"
+          ColumnDefinitions="20, *, 20"
+          Background="Transparent">
+
+        <!-- Title Bar - Extended 10px into content area -->
+        <Grid x:Name="TitleBarHost"
+              Grid.Row="0" Grid.ColumnSpan="3"
+              HeightRequest="42"
+              BackgroundColor="LightGray"
+              Margin="0,0,0,-10"
+              ZIndex="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label Text="{Binding WindowTitle}"
+                   Grid.Column="1"
+                   TextColor="Black"
+                   FontAttributes="Bold"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"/>
+            <Button Text="□" 
+                    Grid.Column="2"
+                    BackgroundColor="Transparent"
+                    TextColor="White"
+                    FontSize="14" 
+                    WidthRequest="30" 
+                    HorizontalOptions="End" 
+                    Margin="0,0,50,0"
+                    Clicked="OnMaximizeClicked" 
+                    ZIndex="1"/>
+            <Button Text="X"
+                    Grid.Column="2"
+                    BackgroundColor="Transparent"
+                    TextColor="black"
+                    FontSize="14" WidthRequest="30" HorizontalOptions="End" Margin="0,0,20,0"
+                    Clicked="OnCloseClicked" ZIndex="1"/>
+
+
+            <!-- Top Edge Handles -->
+            <BoxView x:Name="TopLeftCorner" Grid.Row="0" Grid.Column="0" BackgroundColor="Transparent" ZIndex="15"
+                     HeightRequest="20" WidthRequest="20" VerticalOptions="Start" HorizontalOptions="Start"/>
+
+            <BoxView x:Name="TopEdge" Grid.Row="0" Grid.Column="1" BackgroundColor="Transparent" ZIndex="15"
+                     HeightRequest="10" VerticalOptions="Start"/>
+
+            <BoxView x:Name="TopRightCorner" Grid.Row="0" Grid.Column="2" BackgroundColor="Transparent" ZIndex="15"
+                     HeightRequest="20" WidthRequest="20" VerticalOptions="Start" HorizontalOptions="End"/>
+        </Grid>
+
+        <!-- Content Area - Compensate for title bar overlap -->
+        <!--
+        <ContentView x:Name="WindowContentHost" Grid.Row="1" Grid.Column="1" Margin="0,5,0,0" BackgroundColor="LightCoral" InputTransparent="False" ZIndex="1001"/>
+        -->
+        <ContentView x:Name="WindowContentHost" Grid.Row="1" Grid.Column="1" Margin="0,25,0,0"  Background="Transparent" InputTransparent="False" ZIndex="0"/>
+
+        <!-- Left Edge - Extended into content area -->
+        <BoxView x:Name="LeftEdge" Grid.Row="1" Grid.Column="0" Margin="0,0,0,0" BackgroundColor="Transparent" ZIndex="10" WidthRequest="20" />
+
+        <!-- Right Edge - Extended into content area -->
+        <BoxView x:Name="RightEdge" Grid.Row="1" Grid.Column="2" Margin="0,0,0,0" BackgroundColor="Transparent" ZIndex="10" WidthRequest="20" />
+
+        <!-- Bottom Left Corner -->
+        <BoxView x:Name="BottomLeftCorner" Grid.Row="2" Grid.Column="0" BackgroundColor="Transparent" ZIndex="10" WidthRequest="20" HeightRequest="20"/>
+
+        <!-- Bottom Edge -->
+        <BoxView x:Name="BottomEdge" Grid.Row="2" Grid.Column="1" BackgroundColor="Transparent" ZIndex="10" HeightRequest="20" InputTransparent="False" />
+
+        <!-- Bottom Right Corner -->
+        <BoxView x:Name="BottomRightCorner" Grid.Row="2" Grid.Column="2" BackgroundColor="Transparent" ZIndex="10" WidthRequest="20" HeightRequest="20" />
+    </Grid>
+</Border>

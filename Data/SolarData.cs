@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace seirin1.Data
 {
+  
     public class SolarData
     {
         public double SolarVoltage { get; set; }

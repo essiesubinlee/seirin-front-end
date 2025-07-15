@@ -85,8 +85,40 @@ namespace seirin1
 
 
 
+
+
+        private bool _isWindow1Visible;
+        public bool IsWindow1Visible
+        {
+            get => _isWindow1Visible;
+            set { _isWindow1Visible = value; OnPropertyChanged(); }
+        }
+
+        private bool _isWindow2Visible;
+        public bool IsWindow2Visible
+        {
+            get => _isWindow2Visible;
+            set { _isWindow2Visible = value; OnPropertyChanged(); }
+        }
+
+        // Add these commands
+        public ICommand ShowWindow1Command { get; }
+        public ICommand ShowWindow2Command { get; }
+        public ICommand CloseWindow1Command { get; }
+        public ICommand CloseWindow2Command { get; }
+
+
+
+
         public DashboardViewModel()
         {
+            // Initialize commands
+            ShowWindow1Command = new Command(() => IsWindow1Visible = true);
+            ShowWindow2Command = new Command(() => IsWindow2Visible = true);
+            CloseWindow1Command = new Command(() => IsWindow1Visible = false);
+            CloseWindow2Command = new Command(() => IsWindow2Visible = false);
+
+
 
             PowerItem = new ObservableCollection<object>();
             VoltageItem = new ObservableCollection<object>();
@@ -97,11 +129,11 @@ namespace seirin1
             HumidityItem = new ObservableCollection<object>();
 
             AddPowerLineChartCommand = new Command(async () => await AddLineChart("power"));
-            AddCurrentLineChartCommand = new Command(async() => await AddLineChart("current"));
+            AddCurrentLineChartCommand = new Command(async () => await AddLineChart("current"));
             AddVoltageLineChartCommand = new Command(async () => await AddLineChart("voltage"));
             //AddColumnChartCommand = new Command(AddColumnChart);
 
-            AddSolarRadLineChartCommand = new Command(async() => await AddLineChart("solarRad"));
+            AddSolarRadLineChartCommand = new Command(async () => await AddLineChart("solarRad"));
             AddTempLineChartCommand = new Command(async () => await AddLineChart("temp"));
             AddHumidityLineChartCommand = new Command(async () => await AddLineChart("humidity"));
 
@@ -111,13 +143,13 @@ namespace seirin1
 
             // Add some initial items for testing
             AddLineChart("power");
-            AddLineChart("solarRad");
+            //AddLineChart("solarRad");
             //AddCurrentChart();
             //AddColumnChart();
             //AddWeather();
 
         }
-  
+
 
 
         public async Task AddLineChart(string type)
@@ -128,7 +160,7 @@ namespace seirin1
 
                 var dates = GetDateRange(CombinedStart.Date, CombinedEnd.Date);
                 var allData = new List<EnergyData>();
-                
+
                 foreach (var date in dates)
                 {
                     var filename = $"data_{date:yyyy-MM-dd}.csv";
@@ -145,7 +177,7 @@ namespace seirin1
                 {
                     UpdatePowerCharts(filteredData);
                 }
-                else if(type == "current")
+                else if (type == "current")
                 {
                     UpdateCurrentCharts(filteredData);
                 }
@@ -165,7 +197,7 @@ namespace seirin1
                 {
                     UpdateHumidityCharts(filteredData);
                 }
-         
+
             }
             finally
             {
@@ -175,7 +207,7 @@ namespace seirin1
 
         }
 
-       
+
         private IEnumerable<DateTime> GetDateRange(DateTime start, DateTime end)
         {
             for (var date = start; date <= end; date = date.AddDays(1))
@@ -356,11 +388,11 @@ namespace seirin1
             {
                 PowerItem.Remove(item);
             }
-            if(VoltageItem.Contains(item))
+            if (VoltageItem.Contains(item))
             {
                 VoltageItem.Remove(item);
             }
-            if(WeatherItem.Contains(item))
+            if (WeatherItem.Contains(item))
             {
                 WeatherItem.Remove(item);
             }
@@ -382,6 +414,6 @@ namespace seirin1
             }
         }
 
-        
+
     }
 }
