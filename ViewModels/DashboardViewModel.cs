@@ -112,13 +112,6 @@ namespace seirin1
 
         public DashboardViewModel()
         {
-            // Initialize commands
-            ShowWindow1Command = new Command(() => IsWindow1Visible = true);
-            ShowWindow2Command = new Command(() => IsWindow2Visible = true);
-            CloseWindow1Command = new Command(() => IsWindow1Visible = false);
-            CloseWindow2Command = new Command(() => IsWindow2Visible = false);
-
-
 
             PowerItem = new ObservableCollection<object>();
             VoltageItem = new ObservableCollection<object>();
