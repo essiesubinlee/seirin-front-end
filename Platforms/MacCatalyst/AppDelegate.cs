@@ -1,5 +1,5 @@
 ﻿using Foundation;
-using seirin1.Models;
+using seirin1.ViewModels;
 
 namespace seirin1
 {

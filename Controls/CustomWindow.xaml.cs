@@ -1,6 +1,7 @@
 using Microsoft.Maui.Controls.Shapes;
 using Microsoft.Maui.Graphics;
 using seirin1.Services;
+using seirin1.ViewModels;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -14,6 +15,9 @@ namespace seirin1.Controls
         private bool _isResizing;
         private ResizeDirection _resizeDirection;
         private readonly ILogService _logger;
+        public event Action<string> OnRefreshRequested;
+
+
 
         // Public property to expose the content host
         public ContentView ContentHost => WindowContentHost;
@@ -24,11 +28,19 @@ namespace seirin1.Controls
 
         public static readonly BindableProperty WindowContentProperty =
             BindableProperty.Create(nameof(WindowContent), typeof(View), typeof(CustomWindow), propertyChanged: OnWindowContentChanged);
+        public static readonly BindableProperty WindowTypeProperty =
+       BindableProperty.Create(nameof(WindowType), typeof(string), typeof(CustomWindow));
+
 
         public View WindowContent
         {
             get => (View)GetValue(WindowContentProperty);
             set => SetValue(WindowContentProperty, value);
+        }
+        public string WindowType
+        {
+            get => (string)GetValue(WindowTypeProperty);
+            set => SetValue(WindowTypeProperty, value);
         }
 
         public static readonly BindableProperty WindowTitleProperty =
@@ -58,7 +70,11 @@ namespace seirin1.Controls
                 WindowContentHost.Content.BindingContext = null;
             }
 
+
+
         }
+
+ 
         private static void OnWindowTitleChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var window = (CustomWindow)bindable;
@@ -78,10 +94,47 @@ namespace seirin1.Controls
             }
         }
 
+        private bool _isMinimized = false;
+        private double _originalHeight;
 
-        private void OnMaximizeClicked(object? sender, EventArgs e)
+        private void OnMinimizeClicked(object sender, EventArgs e)
         {
+            if (_isMinimized) return;
+
+            _originalHeight = HeightRequest;
+             HeightRequest = 100; // Set minimized height
+            _isMinimized = true;
         }
+
+        private void OnMaximizeClicked(object sender, EventArgs e)
+        {
+            if (!_isMinimized) return;
+
+            HeightRequest = _originalHeight;
+            _isMinimized = false;
+        }
+
+        private async void OnRefreshClicked(object sender, EventArgs e)
+        {
+
+
+            if (WindowContentHost?.Content?.BindingContext is DashboardViewModel vm)
+            {
+                Debug.WriteLine($"Refresh button clicked for WindowType: {this.WindowType}");
+                // Call the RefreshChart method on the DashboardViewModel,
+                // passing the WindowType of this CustomWindow
+                await vm.RefreshChart(this.WindowType);
+            }
+            else
+            {
+                Debug.WriteLine($"CustomWindow: Could not find DashboardViewModel in WindowContentHost.Content.BindingContext for WindowType: {this.WindowType}. Refresh failed.");
+            }
+        }
+
+
+
+
+
 
         public void SetContentBindingContext(object? bindingContext)
         {

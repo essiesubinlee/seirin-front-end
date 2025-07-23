@@ -73,6 +73,8 @@ namespace seirin1.ViewModels
                                 BatteryCurrent = batteryCurrent,
                                 BatteryPower = batteryPower,
                                 BatteryVoltage = batteryVoltage,
+                                SOC = batterySOC,
+                                BatteryTemp = batteryTemp,
 
                                 Temperature = temp,
                                 Humidity = humidity,

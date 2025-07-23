@@ -73,8 +73,8 @@
 	  <Compile Update="Controls\CustomWindow.xaml.cs">
 	    <DependentUpon>CustomWindow.xaml</DependentUpon>
 	  </Compile>
-	  <Compile Update="Pages\AboutPage.xaml.cs">
-	    <DependentUpon>AboutPage.xaml</DependentUpon>
+	  <Compile Update="Pages\CustomCharts.xaml.cs">
+	    <DependentUpon>CustomCharts.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\DataTable.xaml.cs">
 	    <DependentUpon>DataTable.xaml</DependentUpon>
@@ -96,10 +96,13 @@
 	  <MauiXaml Update="Pages\DataTable.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\AboutPage.xaml">
+	  <MauiXaml Update="Pages\CustomCharts.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Charts.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\NewPage1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

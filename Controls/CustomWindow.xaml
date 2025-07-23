@@ -16,9 +16,9 @@
 
         <!-- Title Bar - Extended 10px into content area -->
         <Grid x:Name="TitleBarHost"
-              Grid.Row="0" Grid.ColumnSpan="3"
+              Grid.Row="0" Grid.ColumnSpan="4"
               HeightRequest="42"
-              BackgroundColor="LightGray"
+              BackgroundColor="lightGray"
               Margin="0,0,0,-10"
               ZIndex="5">
             <Grid.ColumnDefinitions>
@@ -28,10 +28,35 @@
             </Grid.ColumnDefinitions>
             <Label Text="{Binding WindowTitle}"
                    Grid.Column="1"
-                   TextColor="Black"
+                   TextColor="White"
                    FontAttributes="Bold"
                    VerticalOptions="Center"
                    HorizontalOptions="Center"/>
+
+            <Button Text="↻" 
+                Grid.Column="2"
+                BackgroundColor="Transparent"
+                TextColor="White"
+                FontSize="14" 
+                WidthRequest="30" 
+                HorizontalOptions="End" 
+                Margin="0,0,90,0"
+                Clicked="OnRefreshClicked"
+                ZIndex="1"/>
+
+            <Button Text="_" 
+                Grid.Column="2"
+                BackgroundColor="Transparent"
+                TextColor="White"
+                FontSize="14" 
+                WidthRequest="30" 
+                HorizontalOptions="End" 
+                Margin="0,0,60,0"
+                Clicked="OnMinimizeClicked" 
+                ZIndex="1"/>    
+
+
+
             <Button Text="□" 
                     Grid.Column="2"
                     BackgroundColor="Transparent"
@@ -39,14 +64,17 @@
                     FontSize="14" 
                     WidthRequest="30" 
                     HorizontalOptions="End" 
-                    Margin="0,0,50,0"
+                    Margin="0,0,30,0"
                     Clicked="OnMaximizeClicked" 
                     ZIndex="1"/>
+
+               
+
             <Button Text="X"
                     Grid.Column="2"
                     BackgroundColor="Transparent"
-                    TextColor="black"
-                    FontSize="14" WidthRequest="30" HorizontalOptions="End" Margin="0,0,20,0"
+                    TextColor="White"
+                    FontSize="14" WidthRequest="30" HorizontalOptions="End" Margin="0,0,0,0"
                     Clicked="OnCloseClicked" ZIndex="1"/>
 
 

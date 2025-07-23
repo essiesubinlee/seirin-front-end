@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="seirin1.Pages.AboutPage"
-             xmlns:local="clr-namespace:seirin1"
              xmlns:controls="clr-namespace:seirin1.Controls"
+             x:Class="seirin1.Pages.TestPage"
+             xmlns:local="clr-namespace:seirin1.ViewModels"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
-             Title="AboutPage">
+             Title="TestPage" 
+             IconImageSource="test_icon.png">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <local:ChartWeatherTemplateSelector x:Key="ChartWeatherTemplateSelector">
-                <local:ChartWeatherTemplateSelector.LineChartTemplate>
+            <controls:ChartWeatherTemplateSelector x:Key="ChartWeatherTemplateSelector">
+                <controls:ChartWeatherTemplateSelector.LineChartTemplate>
                     <DataTemplate>
                         <Grid Margin="10" 
-                              HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type Grid}}, Path=Height, Converter={StaticResource widthConverter}}"
-                              WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type Grid}}, Path=Width, Converter={StaticResource widthConverter}}">
+                          HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type Grid}}, Path=Height, Converter={StaticResource widthConverter}}"
+                          WidthRequest="{Binding Source={RelativeSource AncestorType={x:Type Grid}}, Path=Width, Converter={StaticResource widthConverter}}">
                             <chart:SfCartesianChart>
                                 <chart:SfCartesianChart.Title>
                                     <Label Text="{Binding Title}" HorizontalOptions="Center"/>
@@ -44,9 +45,9 @@
                             </chart:SfCartesianChart>
                         </Grid>
                     </DataTemplate>
-                </local:ChartWeatherTemplateSelector.LineChartTemplate>
+                </controls:ChartWeatherTemplateSelector.LineChartTemplate>
 
-                <local:ChartWeatherTemplateSelector.ColumnChartTemplate>
+                <controls:ChartWeatherTemplateSelector.ColumnChartTemplate>
                     <DataTemplate>
                         <Grid WidthRequest="300" HeightRequest="250" Margin="10">
                             <chart:SfCartesianChart>
@@ -63,9 +64,9 @@
                             </chart:SfCartesianChart>
                         </Grid>
                     </DataTemplate>
-                </local:ChartWeatherTemplateSelector.ColumnChartTemplate>
+                </controls:ChartWeatherTemplateSelector.ColumnChartTemplate>
 
-                <local:ChartWeatherTemplateSelector.WeatherTemplate>
+                <controls:ChartWeatherTemplateSelector.WeatherTemplate>
                     <DataTemplate>
                         <Frame Padding="10" WidthRequest="300" Margin="10" CornerRadius="10" BackgroundColor="White" BorderColor="#2196F3">
                             <Grid>
@@ -90,8 +91,8 @@
                             </Grid>
                         </Frame>
                     </DataTemplate>
-                </local:ChartWeatherTemplateSelector.WeatherTemplate>
-            </local:ChartWeatherTemplateSelector>
+                </controls:ChartWeatherTemplateSelector.WeatherTemplate>
+            </controls:ChartWeatherTemplateSelector>
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -103,75 +104,91 @@
         <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1"
                     AbsoluteLayout.LayoutFlags="All">
             <VerticalStackLayout Spacing="25" Padding="20">
-                <Button Text="Show Window 1"
+                <Button Text="Show Window 1" 
                         BackgroundColor="#6200EE"
                         TextColor="White"
-                        Command="{Binding ShowWindow1Command}"
+                        Clicked="OnShowWindow1Click"
                         HorizontalOptions="Center"/>
-                <Button Text="Show Window 2 (Chart)"
+                <Button Text="Show Window 2 (Chart)" 
                         BackgroundColor="#6200EE"
                         TextColor="White"
-                        Command="{Binding ShowWindow2Command}"
+                        Clicked="OnShowWindow2Click"
                         HorizontalOptions="Center"/>
             </VerticalStackLayout>
         </ScrollView>
-        <controls:CustomWindow x:Name="CustomWindow1"
-                               IsVisible="{Binding IsWindow1Visible}"
-                               WidthRequest="300"
-                               HeightRequest="200"
-                               WindowTitle="Resizable Window">
-            <controls:CustomWindow.WindowContent>
-                <ScrollView>
-                    <Label Text="Drag title bar to move&#10;Drag any edge or corner to resize"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"/>
-                </ScrollView>
-            </controls:CustomWindow.WindowContent>
-        </controls:CustomWindow>
-
-        <controls:CustomWindow x:Name="CustomWindow2"
-                               IsVisible="{Binding IsWindow2Visible}"
+            <controls:CustomWindow x:Name="CustomWindow1" 
+                               IsVisible="False"
                                WidthRequest="800"
                                HeightRequest="600"
-                               WindowTitle="Sample Chart Window"
-                               AbsoluteLayout.LayoutBounds="{Binding Window2Position, Converter={StaticResource PositionConverter}}"
-                               AbsoluteLayout.LayoutFlags="None"
-                               BindingContext="{Binding .}">
+                               WindowTitle="Resizable Window">
             <controls:CustomWindow.WindowContent>
                 <Grid RowDefinitions="Auto,Auto,*" Padding="10">
                     <VerticalStackLayout Grid.Row="0" Spacing="5">
                         <Label Text="Date Range:" FontAttributes="Bold"/>
                         <HorizontalStackLayout Spacing="10">
                             <DatePicker MinimumDate="01/01/2020"
-                                        MaximumDate="{Binding EndDate}"
-                                        Date="{Binding StartDate}"/>
+                            MaximumDate="{Binding EndDate}"
+                            Date="{Binding StartDate}"/>
                             <TimePicker Time="{Binding StartTime}" Format="HH:mm"/>
                             <DatePicker MinimumDate="{Binding StartDate}"
-                                        MaximumDate="{Binding Today}"
-                                        Date="{Binding EndDate}"/>
+                            MaximumDate="{Binding Today}"
+                            Date="{Binding EndDate}"/>
                             <TimePicker Time="{Binding EndTime}" Format="HH:mm"/>
                         </HorizontalStackLayout>
                     </VerticalStackLayout>
 
                     <HorizontalStackLayout Grid.Row="1" Spacing="10" Margin="0,10">
                         <Button Text="Update Power Chart"
-                                Command="{Binding AddPowerLineChartCommand}"  BackgroundColor="#6200EE"
-                                TextColor="White"/>
+                    Command="{Binding AddPowerLineChartCommand}"  BackgroundColor="#6200EE"
+                    TextColor="White"/>
                     </HorizontalStackLayout>
 
                     <Grid Grid.Row="2" Margin="10">
                         <FlexLayout
-                            BindableLayout.ItemsSource="{Binding PowerItem}"
-                            BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
-                            Wrap="Wrap"
-                            Direction="Row"
-                            JustifyContent="Start"
-                            AlignItems="Start"
-                            Margin="0"/>
-                     
+                    BindableLayout.ItemsSource="{Binding PowerItem}"
+                    BindableLayout.ItemTemplateSelector="{StaticResource ChartWeatherTemplateSelector}"
+                    Wrap="Wrap"
+                    Direction="Row"
+                    JustifyContent="Start"
+                    AlignItems="Start"
+                    Margin="0"/>    
+
                     </Grid>
 
-                    
+
+                </Grid>
+            </controls:CustomWindow.WindowContent>
+        </controls:CustomWindow>
+        
+        
+       
+
+        <controls:CustomWindow x:Name="CustomWindow2" 
+                               IsVisible="False"
+                               WidthRequest="400"
+                               HeightRequest="300"
+                               TranslationX="50" TranslationY="50"
+                               WindowTitle="Sample Chart Window">
+            <controls:CustomWindow.WindowContent>
+                <Grid Padding="10" RowDefinitions="Auto,*" ColumnDefinitions="*,*,*,*">
+                    <Label Grid.ColumnSpan="4" Text="Quarterly Sales" FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="Center"/>
+
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="0" Spacing="5" HorizontalOptions="Center" VerticalOptions="Fill">
+                        <BoxView Color="Blue" HeightRequest="80" WidthRequest="30" VerticalOptions="End"/>
+                        <Label Text="Q1" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="5" HorizontalOptions="Center" VerticalOptions="Fill">
+                        <BoxView Color="Green" HeightRequest="120" WidthRequest="30" VerticalOptions="End"/>
+                        <Label Text="Q2" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="2" Spacing="5" HorizontalOptions="Center" VerticalOptions="Fill">
+                        <BoxView Color="Orange" HeightRequest="100" WidthRequest="30" VerticalOptions="End"/>
+                        <Label Text="Q3" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="3" Spacing="5" HorizontalOptions="Center" VerticalOptions="Fill">
+                        <BoxView Color="Red" HeightRequest="150" WidthRequest="30" VerticalOptions="End"/>
+                        <Label Text="Q4" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
                 </Grid>
             </controls:CustomWindow.WindowContent>
         </controls:CustomWindow>

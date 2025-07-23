@@ -13,7 +13,8 @@
         <ShellContent Title="Home" ContentTemplate="{DataTemplate pages:MainPage}" Route="MainPage" />
         <ShellContent Title="Data Table" ContentTemplate="{DataTemplate pages:DataTable}" Route="DataTable"/>
         <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate pages:Charts}" Route="Charts"/>
-        <ShellContent Title="Page3" ContentTemplate="{DataTemplate pages:AboutPage}" Route="AboutPage"/>
+        <ShellContent Title="Custom Charts" ContentTemplate="{DataTemplate pages:CustomCharts}" Route="CustomChrts"/>
+        <ShellContent Title="Page4" ContentTemplate="{DataTemplate pages:TestPage}" Route="TestPage"/>
     </TabBar>
     
 

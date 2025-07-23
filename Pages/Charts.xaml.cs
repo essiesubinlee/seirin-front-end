@@ -1,4 +1,5 @@
 // In Charts.xaml.cs
+using seirin1.ViewModels;
 namespace seirin1.Pages;
 public partial class Charts : ContentPage
 {

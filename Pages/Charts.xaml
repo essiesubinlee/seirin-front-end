@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:seirin1"
+             xmlns:local="clr-namespace:seirin1.ViewModels"
+             xmlns:controls="clr-namespace:seirin1.Controls"
              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
              x:Class="seirin1.Pages.Charts"
              Title="Charts">
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <local:ChartWeatherTemplateSelector x:Key="ChartWeatherTemplateSelector">
-                <local:ChartWeatherTemplateSelector.LineChartTemplate>
+            <controls:ChartWeatherTemplateSelector x:Key="ChartWeatherTemplateSelector">
+                <controls:ChartWeatherTemplateSelector.LineChartTemplate>
                     <DataTemplate>
                         <Grid MinimumWidthRequest="300" MinimumHeightRequest="400"
                               WidthRequest="700" HeightRequest="500"
@@ -48,55 +49,10 @@
                             <Button Text="X" BackgroundColor="black" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked" />
                         </Grid>
                     </DataTemplate>
-                </local:ChartWeatherTemplateSelector.LineChartTemplate>
+                </controls:ChartWeatherTemplateSelector.LineChartTemplate>
 
-                <local:ChartWeatherTemplateSelector.ColumnChartTemplate>
-                    <DataTemplate>
-                        <Grid WidthRequest="300" HeightRequest="250" Margin="10">
-                            <chart:SfCartesianChart>
-                                <chart:SfCartesianChart.Title>
-                                    <Label Text="{Binding Title}" HorizontalOptions="Center"/>
-                                </chart:SfCartesianChart.Title>
-                                <chart:SfCartesianChart.XAxes>
-                                    <chart:CategoryAxis Name="CategoryAxis"/>
-                                </chart:SfCartesianChart.XAxes>
-                                <chart:SfCartesianChart.YAxes>
-                                    <chart:NumericalAxis/>
-                                </chart:SfCartesianChart.YAxes>
-                                <chart:ColumnSeries ItemsSource="{Binding Data}" XAxisName="CategoryAxis" XBindingPath="Name" YBindingPath="Height" />
-                            </chart:SfCartesianChart>
-                            <Button Text="X" BackgroundColor="black" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked" />
-                        </Grid>
-                    </DataTemplate>
-                </local:ChartWeatherTemplateSelector.ColumnChartTemplate>
-
-                <local:ChartWeatherTemplateSelector.WeatherTemplate>
-                    <DataTemplate>
-                        <Frame Padding="10" WidthRequest="300" Margin="10" CornerRadius="10" BackgroundColor="White" BorderColor="#2196F3">
-                            <Grid>
-                                <StackLayout>
-                                    <Label Text="Location" BackgroundColor="#2196F3" TextColor="White" FontAttributes="Bold" Padding="5"/>
-                                    <Label Text="{Binding Location}" FontSize="20" HorizontalOptions="Center" TextColor="#2196F3"/>
-                                    <Label Text="{Binding CurrentDate, StringFormat='{0:yyyy-MM-dd}'}" FontSize="14" HorizontalOptions="Center"/>
-                                    <Label Text="{Binding CurrentTemp, StringFormat='{0}°C'}" FontSize="36" HorizontalOptions="Center"/>
-                                    <Label Text="{Binding MinMaxTemp}" FontSize="14" HorizontalOptions="Center"/>
-                                    <CollectionView ItemsSource="{Binding Forecast}" ItemsLayout="HorizontalList" HeightRequest="100">
-                                        <CollectionView.ItemTemplate>
-                                            <DataTemplate>
-                                                <StackLayout Orientation="Horizontal" HorizontalOptions="Center" Spacing="15" Padding="10">
-                                                    <Label Text="{Binding Humidity, StringFormat='Humidity: {0}%'}" FontSize="15" VerticalOptions="Center" />
-                                                    <Label Text="{Binding Solar_rad, StringFormat='Solar irradiation: {0}'}" FontSize="15" VerticalOptions="Center" />
-                                                </StackLayout>
-                                            </DataTemplate>
-                                        </CollectionView.ItemTemplate>
-                                    </CollectionView>
-                                </StackLayout>
-                                <Button Text="X" BackgroundColor="Red" TextColor="White" CornerRadius="10" WidthRequest="24" HeightRequest="24" FontSize="10" Padding="0" HorizontalOptions="End" VerticalOptions="Start" Clicked="Delete_Clicked"/>
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </local:ChartWeatherTemplateSelector.WeatherTemplate>
-            </local:ChartWeatherTemplateSelector>
+               
+            </controls:ChartWeatherTemplateSelector>
         </ResourceDictionary>
     </ContentPage.Resources>
 

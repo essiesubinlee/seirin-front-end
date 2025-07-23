@@ -2,7 +2,7 @@
 using seirin1.Data;
 
 
-namespace seirin1
+namespace seirin1.Controls
 {
     // In your ChartWeatherTemplateSelector.cs
     public class ChartWeatherTemplateSelector : DataTemplateSelector

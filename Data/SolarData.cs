@@ -1,15 +1,12 @@
 ﻿
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace seirin1.Data
 {
   
-    public class SolarData
-    {
-        public double SolarVoltage { get; set; }
-        public double SolarCurrent { get; set; }
-        public DateTime Timestamp { get; set; }
-    }
+
 
     public class ChartData
     {
@@ -17,6 +14,8 @@ namespace seirin1.Data
         public string Type { get; set; } // Add a Type property (e.g., "LineChart", "ColumnChart")
 
         public ObservableCollection<PowerPoints> Data { get; set; } // Your chart data points
+
+       
     }
 
 
@@ -28,6 +27,7 @@ namespace seirin1.Data
         public double Solar { get; set; }
         public double Battery { get; set; }
         public double Load { get; set; }
+        public double Weather { get; set; }
 
 
     }
@@ -65,19 +65,75 @@ namespace seirin1.Data
         public double LoadVoltage { get; set; }
         public double LoadCurrent { get; set; }
         public double LoadPower { get; set; }
+        public double SOC { get; set; }
+        public double BatteryTemp { get; set; }
 
         public double Temperature { get; set; }
         public double Humidity { get; set; }
         public double SolarRadiation { get; set; }
     }
 
-
-    public class BatteryInfo
+    public class ChartState : INotifyPropertyChanged
     {
-        public double SOC { get; set; }
-        public double BatteryTemp { get; set; }
+        public string ChartType { get; }
+
+        private DateTime _startDate;
+        public DateTime StartDate
+        {
+            get => _startDate;
+            set { _startDate = value; OnPropertyChanged(); UpdateCombined(); }
+        }
+
+        private TimeSpan _startTime;
+        public TimeSpan StartTime
+        {
+            get => _startTime;
+            set { _startTime = value; OnPropertyChanged(); UpdateCombined(); }
+        }
+
+        private DateTime _endDate;
+        public DateTime EndDate
+        {
+            get => _endDate;
+            set { _endDate = value; OnPropertyChanged(); UpdateCombined(); }
+        }
+
+        private TimeSpan _endTime;
+        public TimeSpan EndTime
+        {
+            get => _endTime;
+            set { _endTime = value; OnPropertyChanged(); UpdateCombined(); }
+        }
+
+        public DateTime CombinedStart { get; private set; }
+        public DateTime CombinedEnd { get; private set; }
+
+        public ChartState(string chartType, DateTime defaultStart)
+        {
+            ChartType = chartType;
+            StartDate = defaultStart.Date;
+            StartTime = TimeSpan.Zero;
+            EndDate = DateTime.UtcNow.Date;
+            EndTime = TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(59));
+        }
+
+        private void UpdateCombined()
+        {
+            CombinedStart = StartDate.Add(StartTime);
+            CombinedEnd = EndDate.Add(EndTime);
+            OnPropertyChanged(nameof(CombinedStart));
+            OnPropertyChanged(nameof(CombinedEnd));
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
+
+ 
     public abstract class ChartContainer
     {
         public string Title { get; set; }
