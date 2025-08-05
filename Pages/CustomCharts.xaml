@@ -464,6 +464,7 @@
                         </Grid>
                     </controls:CustomWindow.WindowContent>
                 </controls:CustomWindow>
+                
                 <controls:CustomWindow x:Name="CustomWindow8"
                     WidthRequest="870"
                     HeightRequest="600"
